@@ -1,7 +1,8 @@
 
 from application import app
 from flask import request
-from application.apps import dianzan
+#from application.apps import dianzan
+import xml
 
 @app.route('/')
 def index():
