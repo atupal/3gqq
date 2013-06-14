@@ -35,5 +35,8 @@ def _dianzan_verify():
     headers['User-Agent'] = ''
 
     D = dianzan.Dianzan_verify()
-    D.verify(data = request.form, headers = headers)
+    data = dict()
+    for i in request.form:
+        data[i] = request.form[i]
+    D.verify(data = data, headers = headers)
     return D.dianzan()
