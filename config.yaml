@@ -1,4 +1,9 @@
 ---
 name: 3gqq67
 version: 1
+
+handlers:
+- url: /static/
+  static_path: application/static
 ...
+
