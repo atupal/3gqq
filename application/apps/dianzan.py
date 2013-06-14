@@ -21,8 +21,8 @@ class Dianzan:
 
     def _parse(self, url, _xpath, content = None):
         try:
-            print url
             if not content:content = self.session.get(url).content
+            print url, content
             #doc = xparse.parseDoc(content)
             #ctxt = doc.xpathNewContext()
             #return ctxt.xpathEval(_xpath)
