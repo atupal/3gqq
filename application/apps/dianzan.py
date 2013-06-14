@@ -1,12 +1,15 @@
 # -*- coding=utf-8 -*-
 
 import requests
-import libxml2 as xparse
+#import libxml2 as xparse
 import sys
 #import re
 reload(sys)
 sys.setdefaultencoding('utf-8')
 #import copy
+
+from xml.dom.minidom import parse
+import xpath
 
 __metaclass__ = type
 class Dianzan:
@@ -19,9 +22,14 @@ class Dianzan:
     def _parse(self, url, _xpath, content = None):
         try:
             if not content:content = self.session.get(url).content
-            doc = xparse.parseDoc(content)
-            ctxt = doc.xpathNewContext()
-            return ctxt.xpathEval(_xpath)
+            #doc = xparse.parseDoc(content)
+            #ctxt = doc.xpathNewContext()
+            #return ctxt.xpathEval(_xpath)
+            doc = parse(content)
+            ret = xpath.find(_xpath, doc)
+            for i in xrange(len(ret)):
+                ret[i].__setattr__('content', ret[i].nodeValue)
+            return ret
         except Exception as e:
             print e
             return []
