@@ -28,6 +28,12 @@ def _dianzan():
 def _dianzan_verify():
     if request.method != 'POST':
         return 'methods not allowed!'
+    headers = dict()
+    headers['Origin'] = 'http://pt.3g.qq.com'
+    headers['Host'] = 'pt.3g.qq.com'
+    #headers['User-Agent'] = 'curl/7.21.3 (i686-pc-linux-gnu) libcurl/7.21.3 OpenSSL/0.9.8o zlib/1.2.3.4 libidn/1.18'
+    headers['User-Agent'] = ''
+
     D = dianzan.Dianzan_verify()
-    D.verify()
+    D.verify(data = request.form, headers = headers)
     return D.dianzan()

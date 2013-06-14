@@ -87,10 +87,10 @@ class Dianzan:
             r = self.session.get(img_url)
             verify_img = Image.open(StringIO(r.content))
             verify_img.show()
+            url = self._parse(None, '//*/@href', content = res.content)[1].content #post地址
             import os
             if os.environ.get('HOME') == '/home/atupal':
                 data['verify'] = raw_input("verify:")
-                url = self._parse(None, '//*/@href', content = res.content)[1].content #post地址
                 res = self.session.post(url, data = data, headers = headers, allow_redirects = False)
                 url = res.headers['location']
 
@@ -103,6 +103,8 @@ class Dianzan:
                 form = '<form action="/dianzan_verify" method="post">'
                 for i in data:
                     form += '<input type="hidden" name="%s" value="%s"></input>'%(i, data[i])
+
+                form += '<input type="hidden" name="url" value="%s"></input>'%url #带上url，下次浏览器post接收
                 form += '<input type="text" name="verify"></input>'
                 form += '<input type="submit" value="confirm"></input>'
                 form += '</form>'
@@ -161,7 +163,18 @@ class Dianzan_verify(Dianzan):
         self.session = requests.Session()
 
     def verify(self, data, headers):
-        pass
+        url = data.pop('url')
+        res = self.session.post(url, data = data, headers = headers, allow_redirects = False)
+        url = res.headers['location']
+
+        #验证码后第一次get
+        url = self._parse(url, '/wml/card/@ontimer')[0].content
+
+        #验证码后第二次get
+        url = self._parse(url, '/wml/card/@ontimer')[0].content
+
+        self.verify = None
+        self.url = url
 
 
 if __name__ == "__main__":
