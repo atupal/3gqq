@@ -70,6 +70,9 @@ class Dianzan:
         #urls = re.findall(patter, content)
 
         feed_url = self.url
+        url = self._parse(feed_url, '/wml/card/@ontimer')
+        if url:
+            feed_url = url[0].content
         for i in xrange(cnt):
             print feed_url
             content = self.session.get(feed_url).content
