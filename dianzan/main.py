@@ -61,7 +61,7 @@ class Dianzan:
 
         #至此已经登陆成功了
 
-    def dianzan(self):
+    def dianzan(self, cnt = 5, op = '1'):
         '''
         下面这中方法返回的地址是转义了的。。
         '''
@@ -69,11 +69,21 @@ class Dianzan:
         #content = self.session.get(self.url).content
         #urls = re.findall(patter, content)
 
-        urls = self._parse(self.url, '//*/@href')
+        feed_url = self.url
+        for i in xrange(cnt):
+            print feed_url
+            content = self.session.get(feed_url).content
 
-        for url in urls:
-            if url.content.find('like_action') != -1 and url.content[-1] == '1':
-                print self.session.get(url.content).content
+            urls = self._parse(None, '//*/@href', content = content)
+            for url in urls:
+                if url.content.find('like_action') != -1 and url.content[-1] == op:
+                    print self.session.get(url.content).content
+
+            urls = self._parse(None, '//*/@href', content = content)
+            for url in urls:
+                if url.content.find('feeds_friends') != -1 and url.content.find('dayval=1') != -1:
+                    feed_url = url.content
+
 
 
 
