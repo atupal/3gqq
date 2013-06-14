@@ -23,7 +23,7 @@ def index():
                     <input name="pwd" type="password" placeholder="Password">
                 </form>
             </div>
-            <input type="submit" value="confirm" onclick='document.getElementById("login").submit'>
+            <input type="submit" value="confirm" onclick='document.getElementById("login").submit()'>
         </div>
     </html>
     '''
