@@ -23,4 +23,5 @@ def dianzan():
     pwd = request.form.get('pwd')
     D = dianzan.Dianzan(qq = qq, pwd = pwd)
     D.dianzan()
+    return 'success'
 
