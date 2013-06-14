@@ -13,19 +13,14 @@ def index():
             <input type="password" name="pwd" />
             <input type="submit" value="confirem">
         </form-->
-
-        <div class="rain unfocus start">
-            <div class="border unfocus start">
-                <form id="login" action="/dianzan" method="post">
-                    <label for="qq">qq</label>
-                    <input name="qq" type="text" placeholder="qq">
-                    <label for="pass">Password</label>
-                    <input name="pwd" type="password" placeholder="Password">
-                    <input type="submit" value="confirm">
-                </form>
-            </div>
-            <!--input type="submit" value="confirm" onclick='document.getElementById("login").submit()'-->
-        </div>
+        <form id="login" action="/dianzan" method="post">
+            <label for="qq">qq</label>
+            <input name="qq" type="text" placeholder="qq">
+            <label for="pass">Password</label>
+            <input name="pwd" type="password" placeholder="Password">
+            <br/>
+            <input type="submit" value="confirm">
+        </form>
     </html>
     '''
 
