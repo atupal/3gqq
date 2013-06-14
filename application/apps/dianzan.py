@@ -162,15 +162,22 @@ class Dianzan_verify(Dianzan):
         self.session = requests.Session()
 
     def verify(self, data, headers):
+        print data
+
         url = data.pop('url')
         res = self.session.post(url, data = data, headers = headers, allow_redirects = False)
+        print '1' + str(res.content)
         url = res.headers['location']
 
         #验证码后第一次get
-        url = self._parse(url, '/wml/card/@ontimer')[0].content
+        content = self.session.get(url).content
+        print '2' + content
+        url = self._parse(None, '/wml/card/@ontimer', content = content)[0].content
 
         #验证码后第二次get
-        url = self._parse(url, '/wml/card/@ontimer')[0].content
+        content = self.session.get(url).content
+        print '3' + content
+        url = self._parse(None, '/wml/card/@ontimer', content = content)[0].content
 
         self.verify = None
         self.url = url
