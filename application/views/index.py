@@ -13,14 +13,8 @@ def index():
             padding: 4px;
             }
 
-            #member{
-            width: 170px;
-            background: #F1F1F1;
-            text-align: center;
-            }
-
             label{
-            width: 40px;
+            width: 80px;
             float: left;
             text-align: right;
             padding: 3px 0px 1px;
@@ -37,7 +31,7 @@ def index():
             }
 
             .bt{
-            width: 22px;
+            width: 44px;
             height: 20px;
             font-size: 10px;
             color: #333333;
