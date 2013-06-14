@@ -1,12 +1,15 @@
 # -*- coding=utf-8 -*-
 
 import requests
-import libxml2 as xparse
+#import libxml2 as xparse
 import sys
 #import re
 reload(sys)
 sys.setdefaultencoding('utf-8')
 #import copy
+
+from xml.dom.minidom import parseString
+import xpath
 
 __metaclass__ = type
 class Dianzan:
@@ -19,9 +22,14 @@ class Dianzan:
     def _parse(self, url, _xpath, content = None):
         try:
             if not content:content = self.session.get(url).content
-            doc = xparse.parseDoc(content)
-            ctxt = doc.xpathNewContext()
-            return ctxt.xpathEval(_xpath)
+            #doc = xparse.parseDoc(content)
+            #ctxt = doc.xpathNewContext()
+            #return ctxt.xpathEval(_xpath)
+            doc = parseString(content)
+            ret = xpath.find(_xpath, doc)
+            for i in xrange(len(ret)):
+                ret[i].__setattr__('content', ret[i].nodeValue)
+            return ret
         except Exception as e:
             print e
             return []
@@ -53,6 +61,9 @@ class Dianzan:
 
         url = self.session.post(url, data = data, headers = headers, allow_redirects = False).headers['location']
         #post之后重定向的地址，这里如果允许自动跳转的话不知道为什么会跳转到腾讯首页去。。蛋疼
+
+        if not url:
+            raise Exception
 
         url = self._parse(url, '/wml/card/@ontimer')[0].content  #再get一次就登陆成功了 ,以上和chrome浏览器都略有不用，没有302
         self.url = url
@@ -91,4 +102,4 @@ if __name__ == "__main__":
     qq = raw_input('qq:')
     pwd = raw_input('pwd:')
     D = Dianzan(qq = qq, pwd = pwd)
-    D.dianzan(cnt = 1)
+    D.dianzan()
