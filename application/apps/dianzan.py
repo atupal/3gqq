@@ -47,7 +47,6 @@ class Dianzan:
         headers = dict()
         content = self.session.get(url).content
         url = self._parse(None, '//*/@href', content = content)[1].content #post地址
-        print url
         names = ['login_url', 'go_url', 'sidtype', 'aid']
         for name in names:
             value = self._parse(None, '//*[@name="'+ name +'"]/@value', content = content)[0].content
@@ -60,6 +59,7 @@ class Dianzan:
         #headers['User-Agent'] = 'curl/7.21.3 (i686-pc-linux-gnu) libcurl/7.21.3 OpenSSL/0.9.8o zlib/1.2.3.4 libidn/1.18'
         headers['User-Agent'] = ''
 
+        print url, data
         url = self.session.post(url, data = data, headers = headers, allow_redirects = False).headers['location']
         #post之后重定向的地址，这里如果允许自动跳转的话不知道为什么会跳转到腾讯首页去。。蛋疼
 
