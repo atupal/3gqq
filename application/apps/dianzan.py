@@ -8,7 +8,7 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 #import copy
 
-from xml.dom.minidom import parse
+from xml.dom.minidom import parseString
 import xpath
 
 __metaclass__ = type
@@ -25,7 +25,7 @@ class Dianzan:
             #doc = xparse.parseDoc(content)
             #ctxt = doc.xpathNewContext()
             #return ctxt.xpathEval(_xpath)
-            doc = parse(content)
+            doc = parseString(content)
             ret = xpath.find(_xpath, doc)
             for i in xrange(len(ret)):
                 ret[i].__setattr__('content', ret[i].nodeValue)
@@ -99,4 +99,4 @@ if __name__ == "__main__":
     qq = raw_input('qq:')
     pwd = raw_input('pwd:')
     D = Dianzan(qq = qq, pwd = pwd)
-    D.dianzan(cnt = 1)
+    D.dianzan()
