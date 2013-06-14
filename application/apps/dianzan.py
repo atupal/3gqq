@@ -64,6 +64,8 @@ class Dianzan:
         url = res.headers['location']#post之后重定向的地址，这里如果允许自动跳转的话不知道为什么会跳转到腾讯首页去。。蛋疼
 
         if not url:
+            print 'sf'
+            return
             data = dict()
             img_url = self._parse(None, '//img/@src', content = res.content)[0].content
             names = [
