@@ -18,7 +18,7 @@ def index():
             <input name="qq" type="text" placeholder="qq">
             <label for="pass">Password</label>
             <input name="pwd" type="password" placeholder="Password">
-            <br/>
+            <hr/>
             <input type="submit" value="confirm">
         </form>
     </html>
