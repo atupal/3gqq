@@ -100,9 +100,8 @@ class Dianzan:
                 #验证码后第二次get
                 url = self._parse(url, '/wml/card/@ontimer')[0].content
             else:
-                print 'sdf'
                 import json
-                self.verfity = json.dumps({
+                self.verfify = json.dumps({
                         'data': data,
                         'headers': headers,
                         'img': img_url
