@@ -22,6 +22,4 @@ def _dianzan():
     qq = request.form.get('qq')
     pwd = request.form.get('pwd')
     D = dianzan.Dianzan(qq = qq, pwd = pwd)
-    D.dianzan()
-    return 'success'
-
+    return D.dianzan()

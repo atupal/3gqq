@@ -59,12 +59,58 @@ class Dianzan:
         #headers['User-Agent'] = 'curl/7.21.3 (i686-pc-linux-gnu) libcurl/7.21.3 OpenSSL/0.9.8o zlib/1.2.3.4 libidn/1.18'
         headers['User-Agent'] = ''
 
-        print self.session.post(url, data = data, headers = headers, allow_redirects = False).content
-        return
-        #url = self.session.post(url, data = data, headers = headers, allow_redirects = False).headers['location']
-        #post之后重定向的地址，这里如果允许自动跳转的话不知道为什么会跳转到腾讯首页去。。蛋疼
 
-        url = self._parse(url, '/wml/card/@ontimer')[0].content  #再get一次就登陆成功了 ,以上和chrome浏览器都略有不用，没有302
+        res = self.session.post(url, data = data, headers = headers, allow_redirects = False)
+        url = res.headers['location']#post之后重定向的地址，这里如果允许自动跳转的话不知道为什么会跳转到腾讯首页去。。蛋疼
+
+        if not url:
+            data = dict()
+            img_url = self._parse(None, '//img/@src', content = res.content)[0].content
+            names = [
+                    'qq'        ,
+                    'u_token'   ,
+                    'r'         ,
+                    'extend'    ,
+                    'r_sid'     ,
+                    'aid'       ,
+                    'hiddenPwd' ,
+                    'login_url' ,
+                    'go_url'    ,
+                    'verify'    ,
+                    'sidtype'   ,
+                    ]
+            for name in names:
+                value = self._parse(None, '//*[@name="'+ name +'"]/@value', content = res.content)[0].content
+                data[name] = value
+            from PIL import Image
+            from StringIO import StringIO
+            r = self.session.get(img_url)
+            verify_img = Image.open(StringIO(r.content))
+            verify_img.show()
+            import os
+            if os.environ['HOME'] == '/home/atupal':
+                data['verify'] = raw_input("verify:")
+                url = self._parse(None, '//*/@href', content = res.content)[1].content #post地址
+                res = self.session.post(url, data = data, headers = headers, allow_redirects = False)
+                url = res.headers['location']
+
+                #验证码后第一次get
+                url = self._parse(url, '/wml/card/@ontimer')[0].content
+
+                #验证码后第二次get
+                url = self._parse(url, '/wml/card/@ontimer')[0].content
+            else:
+                import json
+                self.verfity = json.dumps({
+                        'data': data,
+                        'headers': headers,
+                        'img': img_url
+                        })
+
+        else:
+            url = self._parse(url, '/wml/card/@ontimer')[0].content  #再get一次就登陆成功了 ,以上和chrome浏览器都略有不用，没有302
+
+        self.verify = None
         self.url = url
 
         #print self.session.get(url).content
@@ -79,7 +125,13 @@ class Dianzan:
         #content = self.session.get(self.url).content
         #urls = re.findall(patter, content)
 
+        if self.verify:
+            return self.verify
+
         feed_url = self.url
+        url = self._parse(feed_url, '/wml/card/@ontimer') #不知道为什么换了一个qq号的时候这里会多加一个跳转
+        if url:
+            feed_url = url[0].content
         for i in xrange(cnt):
             print feed_url
             content = self.session.get(feed_url).content
@@ -93,6 +145,7 @@ class Dianzan:
             for url in urls:
                 if url.content.find('feeds_friends') != -1 and url.content.find('dayval=1') != -1:
                     feed_url = url.content
+        return 'success'
 
 
 
