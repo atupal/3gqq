@@ -166,17 +166,17 @@ class Dianzan_verify(Dianzan):
 
         url = data.pop('url')
         res = self.session.post(url, data = data, headers = headers, allow_redirects = False)
-        print '1' + str(res.content)
+        #print '1' + str(res.content)
         url = res.headers['location']
 
         #验证码后第一次get
         content = self.session.get(url).content
-        print '2' + content
+        #print '2' + content
         url = self._parse(None, '/wml/card/@ontimer', content = content)[0].content
 
         #验证码后第二次get
         content = self.session.get(url).content
-        print '3' + content
+        #print '3' + content
         url = self._parse(None, '/wml/card/@ontimer', content = content)[0].content
 
         self.verify = None
