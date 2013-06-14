@@ -7,11 +7,24 @@ from application.apps import dianzan
 def index():
     return '''
     <html>
-        <form action="/dianzan" method="post">
+        <style type="text/css">embed[type*="application/x-shockwave-flash"],embed[src*=".swf"],object[type*="application/x-shockwave-flash"],object[codetype*="application/x-shockwave-flash"],object[src*=".swf"],object[codebase*="swflash.cab"],object[classid*="D27CDB6E-AE6D-11cf-96B8-444553540000"],object[classid*="d27cdb6e-ae6d-11cf-96b8-444553540000"],object[classid*="D27CDB6E-AE6D-11cf-96B8-444553540000"]{   display: none !important;}</style>
+        <!--form action="/dianzan" method="post">
             <input type="text" value="qq" name="qq"/>
             <input type="password" name="pwd" />
             <input type="submit" value="confirem">
-        </form>
+        </form-->
+
+        <div class="rain unfocus start">
+            <div class="border unfocus start">
+                <form id="login" action="/dianzan" method="post">
+                    <label for="qq">qq</label>
+                    <input name="qq" type="text" placeholder="qq">
+                    <label for="pass">Password</label>
+                    <input name="pwd" type="password" placeholder="Password">
+                </form>
+            </div>
+            <input type="submit" value="confirm" onclick="document.getElementById("login").submit">
+        </div>
     </html>
     '''
 
