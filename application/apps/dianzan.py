@@ -62,8 +62,8 @@ class Dianzan:
         url = self.session.post(url, data = data, headers = headers, allow_redirects = False).headers['location']
         #post之后重定向的地址，这里如果允许自动跳转的话不知道为什么会跳转到腾讯首页去。。蛋疼
 
-        url = self._parse(url, '/wml/card/@ontimer')[0].content  #再get一次就登陆成功了 ,以上和chrome浏览器都略有不用，没有302
         print 'url == ' + url
+        url = self._parse(url, '/wml/card/@ontimer')[0].content  #再get一次就登陆成功了 ,以上和chrome浏览器都略有不用，没有302
         self.url = url
 
         #print self.session.get(url).content
