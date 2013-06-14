@@ -22,7 +22,6 @@ class Dianzan:
     def _parse(self, url, _xpath, content = None):
         try:
             if not content:content = self.session.get(url).content
-            print url, content
             #doc = xparse.parseDoc(content)
             #ctxt = doc.xpathNewContext()
             #return ctxt.xpathEval(_xpath)
@@ -48,6 +47,7 @@ class Dianzan:
         headers = dict()
         content = self.session.get(url).content
         url = self._parse(None, '//*/@href', content = content)[1].content #post地址
+        print url
         names = ['login_url', 'go_url', 'sidtype', 'aid']
         for name in names:
             value = self._parse(None, '//*[@name="'+ name +'"]/@value', content = content)[0].content
