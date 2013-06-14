@@ -2,6 +2,7 @@
 from flask import Flask
 
 app = Flask(__name__)
+app.DEBUG = True
 
 @app.before_request
 def before_request():
