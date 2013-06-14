@@ -1,6 +1,6 @@
 
 from application import app
-import request
+from flask import request
 from application.apps import dianzan
 
 @app.route('/')
@@ -9,7 +9,7 @@ def index():
     <html>
         <form action="/dianzan" method="post">
             <input type="text" value="qq" name="qq"/>
-            <input type="text" value="pwd" name="pwd" />
+            <input type="password" value="pwd" name="pwd" />
             <input type="submit" value="confirem">
         </form>
     </html>
