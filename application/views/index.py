@@ -9,7 +9,7 @@ def index():
     <html>
         <form action="/dianzan" method="post">
             <input type="text" value="qq" name="qq"/>
-            <input type="password" value="pwd" name="pwd" />
+            <input type="password" name="pwd" />
             <input type="submit" value="confirem">
         </form>
     </html>
