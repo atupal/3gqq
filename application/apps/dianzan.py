@@ -88,7 +88,7 @@ class Dianzan:
             verify_img = Image.open(StringIO(r.content))
             verify_img.show()
             import os
-            if os.environ['HOME'] == '/home/atupal':
+            if os.environ.get('HOME') == '/home/atupal':
                 data['verify'] = raw_input("verify:")
                 url = self._parse(None, '//*/@href', content = res.content)[1].content #post地址
                 res = self.session.post(url, data = data, headers = headers, allow_redirects = False)
