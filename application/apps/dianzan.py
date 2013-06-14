@@ -101,7 +101,7 @@ class Dianzan:
                 url = self._parse(url, '/wml/card/@ontimer')[0].content
             else:
                 import json
-                self.verfify = json.dumps({
+                self.verify = json.dumps({
                         'data': data,
                         'headers': headers,
                         'img': img_url
