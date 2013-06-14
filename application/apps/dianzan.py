@@ -64,8 +64,6 @@ class Dianzan:
         url = res.headers['location']#post之后重定向的地址，这里如果允许自动跳转的话不知道为什么会跳转到腾讯首页去。。蛋疼
 
         if not url:
-            print 'sf'
-            return
             data = dict()
             img_url = self._parse(None, '//img/@src', content = res.content)[0].content
             names = [
@@ -102,12 +100,14 @@ class Dianzan:
                 #验证码后第二次get
                 url = self._parse(url, '/wml/card/@ontimer')[0].content
             else:
+                print 'sdf'
                 import json
                 self.verfity = json.dumps({
                         'data': data,
                         'headers': headers,
                         'img': img_url
                         })
+                return
 
         else:
             url = self._parse(url, '/wml/card/@ontimer')[0].content  #再get一次就登陆成功了 ,以上和chrome浏览器都略有不用，没有302
