@@ -24,7 +24,7 @@ def _dianzan():
     D = dianzan.Dianzan(qq = qq, pwd = pwd)
     return D.dianzan()
 
-@app.route('./dianzan_verify', methods = ['POST'])
+@app.route('/dianzan_verify', methods = ['POST'])
 def _dianzan_verify():
     if request.method != 'POST':
         return 'methods not allowed!'
