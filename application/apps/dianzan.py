@@ -158,8 +158,7 @@ class Dianzan:
         return 'success'
 
 class Dianzan_verify(Dianzan):
-    def __init__(self, url):
-        self.url = url
+    def __init__(self):
         self.session = requests.Session()
 
     def verify(self, data, headers):
