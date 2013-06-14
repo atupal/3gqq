@@ -7,46 +7,12 @@ from application.apps import dianzan
 def index():
     return '''
     <html>
-        <style>
-            form{
-            margin: 0px;
-            padding: 4px;
-            }
-
-            label{
-            width: 80px;
-            float: left;
-            text-align: right;
-            padding: 3px 0px 1px;
-            color: #666666;
-            }
-
-            input{
-            border: 1px solid #CCCCCC;
-            margin: 1px;
-            padding: 1px;
-            font-family: Arial;
-            font-size: 12px;
-            color: #666666;
-            }
-
-            .bt{
-            width: 44px;
-            height: 20px;
-            font-size: 10px;
-            color: #333333;
-            border: solid 1px #CCCCCC;
-            background: #FBFBFB;
-            }
-        </style>
         <body>
             <form id="login" action="/dianzan" method="post">
                 <label for="qq">qq</label>
                 <input name="qq" type="text" placeholder="qq">
-                <br/>
                 <label for="pass">Password</label>
                 <input name="pwd" type="password" placeholder="Password">
-                <br/>
                 <input type="submit" value="confirm" class="bt">
             </form>
         </body>
