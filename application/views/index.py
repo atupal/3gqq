@@ -10,9 +10,13 @@ def index():
         <body>
             <form id="login" action="/dianzan" method="post">
                 <label for="qq">qq</label>
+                <br/>
                 <input name="qq" type="text" placeholder="qq">
+                <br/>
                 <label for="pass">Password</label>
+                <br/>
                 <input name="pwd" type="password" placeholder="Password">
+                <br/>
                 <input type="submit" value="confirm" class="bt">
             </form>
         </body>
