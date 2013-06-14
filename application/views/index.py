@@ -16,7 +16,7 @@ def index():
     '''
 
 @app.route('/dianzan', methods = ['POST'])
-def dianzan():
+def _dianzan():
     if request.method != 'POST':
         return 'methods not allowed!'
     qq = request.form.get('qq')
