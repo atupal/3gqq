@@ -76,7 +76,7 @@ class Dianzan:
                     'hiddenPwd' ,
                     'login_url' ,
                     'go_url'    ,
-                    'verify'    ,
+                    #'verify'    ,
                     'sidtype'   ,
                     ]
             for name in names:
@@ -100,12 +100,19 @@ class Dianzan:
                 #验证码后第二次get
                 url = self._parse(url, '/wml/card/@ontimer')[0].content
             else:
-                import json
-                self.verify = json.dumps({
-                        'data': data,
-                        'headers': headers,
-                        'img': img_url
-                        })
+                form = '<form action="/dianzan_verify" method="post">'
+                for i in data:
+                    form += '<input type="hidden" name="%s" value="%s"></input>'%(i, data[i])
+                form += '<input type="text" name="verify"></input>'
+                form += '<input type="submit" value="confirm"></input>'
+                form += '</form>'
+                self.verify = '''
+                    <html>
+                        <img src="%s"/>
+                        %s
+                    </html>
+                '''%(img_url, form)
+
                 return
 
         else:
@@ -148,7 +155,13 @@ class Dianzan:
                     feed_url = url.content
         return 'success'
 
+class Dianzan_verify(Dianzan):
+    def __init__(self, url):
+        self.url = url
+        self.session = requests.Session()
 
+    def verify(self, data, headers):
+        pass
 
 
 if __name__ == "__main__":
