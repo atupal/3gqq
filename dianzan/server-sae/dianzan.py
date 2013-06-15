@@ -76,7 +76,7 @@ class Dianzan:
                     'hiddenPwd' ,
                     'login_url' ,
                     'go_url'    ,
-                    'verify'    ,
+                    #'verify'    ,
                     'sidtype'   ,
                     ]
             for name in names:
@@ -87,25 +87,49 @@ class Dianzan:
             r = self.session.get(img_url)
             verify_img = Image.open(StringIO(r.content))
             verify_img.show()
+            url = self._parse(None, '//*/@href', content = res.content)[1].content #post地址
             import os
-            if os.environ['HOME'] == '/home/atupal':
+            if os.environ.get('HOME') == '/home/atupal':
                 data['verify'] = raw_input("verify:")
-                url = self._parse(None, '//*/@href', content = res.content)[1].content #post地址
+                url = self._verify(data = data, headers = headers, url = url)
+                '''#代码重复了，发送验证码的实现逻辑由_verrify方法实现
                 res = self.session.post(url, data = data, headers = headers, allow_redirects = False)
+                #print '1' + str(res.content)
                 url = res.headers['location']
 
+                ##验证码后第一次get
+                #url = self._parse(url, '/wml/card/@ontimer')[0].content
+
+                ##验证码后第二次get
+                #url = self._parse(url, '/wml/card/@ontimer')[0].content
+
                 #验证码后第一次get
-                url = self._parse(url, '/wml/card/@ontimer')[0].content
+                content = self.session.get(url).content
+                #print '2' + content
+                url = self._parse(None, '/wml/card/@ontimer', content = content)[0].content
 
                 #验证码后第二次get
-                url = self._parse(url, '/wml/card/@ontimer')[0].content
+                content = self.session.get(url).content
+                #print '3' + content
+                url = self._parse(None, '/wml/card/@ontimer', content = content)[0].content
+                '''
             else:
-                import json
-                self.verfity = json.dumps({
-                        'data': data,
-                        'headers': headers,
-                        'img': img_url
-                        })
+                form = '<form action="/dianzan_verify" method="post">'
+                for i in data:
+                    form += '<input type="hidden" name="%s" value="%s"></input>'%(i, data[i])
+
+                form += '<input type="hidden" name="url" value="%s"></input>'%url #带上url，下次浏览器post接收
+                form += '<input type="text" name="verify"></input>'
+                form += '<input type="submit" value="confirm"></input>'
+                form += '</form>'
+                self.verify = '''
+                    <html>
+                        <img src="%s"/>
+                        %s
+                    </html>
+                '''%(img_url, form)
+
+                return
 
         else:
             url = self._parse(url, '/wml/card/@ontimer')[0].content  #再get一次就登陆成功了 ,以上和chrome浏览器都略有不用，没有302
@@ -116,6 +140,31 @@ class Dianzan:
         #print self.session.get(url).content
 
         #至此已经登陆成功了
+    def _verify(self, data, headers, url = None):
+        if not url:
+            url = data.pop('url')
+        res = self.session.post(url, data = data, headers = headers, allow_redirects = False)
+        print '1' + str(res.content)
+        url = res.headers['location']
+
+        #验证码后第一次get
+        content = self.session.get(url).content
+        print '2' + content
+        url = self._parse(None, '/wml/card/@ontimer', content = content)[0].content
+
+        #验证码后第二次get
+        content = self.session.get(url).content
+        print '3' + content
+
+        #有的账号会再跳转一次，有的不会,算个bug吧
+        try:
+            url_tmp = self._parse(None, '/wml/card/@ontimer', content = content)[0].content
+        except:
+            url_tmp = None
+        if url_tmp:
+            url = url_tmp
+        return url
+
 
     def dianzan(self, cnt = 5, op = '1'):
         '''
@@ -147,7 +196,34 @@ class Dianzan:
                     feed_url = url.content
         return 'success'
 
+class Dianzan_verify(Dianzan):
+    def __init__(self):
+        self.session = requests.Session()
 
+    def verify(self, data, headers):
+        print data
+        self.url = self._verify(data = data, headers = headers)
+        self.verify = None
+
+        '''代码重复了，写到了父类的_verify方法里面去了统一处理需要验证码时的情况
+        url = data.pop('url')
+        res = self.session.post(url, data = data, headers = headers, allow_redirects = False)
+        #print '1' + str(res.content)
+        url = res.headers['location']
+
+        #验证码后第一次get
+        content = self.session.get(url).content
+        #print '2' + content
+        url = self._parse(None, '/wml/card/@ontimer', content = content)[0].content
+
+        #验证码后第二次get
+        content = self.session.get(url).content
+        #print '3' + content
+        url = self._parse(None, '/wml/card/@ontimer', content = content)[0].content
+
+        self.verify = None
+        self.url = url
+        '''
 
 
 if __name__ == "__main__":

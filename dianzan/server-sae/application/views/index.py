@@ -7,11 +7,15 @@ from application.apps import dianzan
 def index():
     return '''
     <html>
-        <form action="/dianzan" method="post">
-            <input type="text" value="qq" name="qq"/>
-            <input type="password" name="pwd" />
-            <input type="submit" value="confirem">
-        </form>
+        <body>
+            <form id="login" action="/dianzan" method="post">
+                <input name="qq" type="text" placeholder="qq">
+                <br/>
+                <input name="pwd" type="password" placeholder="Password">
+                <br/>
+                <input type="submit" value="confirm" class="bt">
+            </form>
+        </body>
     </html>
     '''
 

@@ -91,14 +91,28 @@ class Dianzan:
             import os
             if os.environ.get('HOME') == '/home/atupal':
                 data['verify'] = raw_input("verify:")
+                url = self._verify(data = data, headers = headers, url = url)
+                '''#代码重复了，发送验证码的实现逻辑由_verrify方法实现
                 res = self.session.post(url, data = data, headers = headers, allow_redirects = False)
+                #print '1' + str(res.content)
                 url = res.headers['location']
 
+                ##验证码后第一次get
+                #url = self._parse(url, '/wml/card/@ontimer')[0].content
+
+                ##验证码后第二次get
+                #url = self._parse(url, '/wml/card/@ontimer')[0].content
+
                 #验证码后第一次get
-                url = self._parse(url, '/wml/card/@ontimer')[0].content
+                content = self.session.get(url).content
+                #print '2' + content
+                url = self._parse(None, '/wml/card/@ontimer', content = content)[0].content
 
                 #验证码后第二次get
-                url = self._parse(url, '/wml/card/@ontimer')[0].content
+                content = self.session.get(url).content
+                #print '3' + content
+                url = self._parse(None, '/wml/card/@ontimer', content = content)[0].content
+                '''
             else:
                 form = '<form action="/dianzan_verify" method="post">'
                 for i in data:
@@ -126,6 +140,31 @@ class Dianzan:
         #print self.session.get(url).content
 
         #至此已经登陆成功了
+    def _verify(self, data, headers, url = None):
+        if not url:
+            url = data.pop('url')
+        res = self.session.post(url, data = data, headers = headers, allow_redirects = False)
+        print '1' + str(res.content)
+        url = res.headers['location']
+
+        #验证码后第一次get
+        content = self.session.get(url).content
+        print '2' + content
+        url = self._parse(None, '/wml/card/@ontimer', content = content)[0].content
+
+        #验证码后第二次get
+        content = self.session.get(url).content
+        print '3' + content
+
+        #有的账号会再跳转一次，有的不会,算个bug吧
+        try:
+            url_tmp = self._parse(None, '/wml/card/@ontimer', content = content)[0].content
+        except:
+            url_tmp = None
+        if url_tmp:
+            url = url_tmp
+        return url
+
 
     def dianzan(self, cnt = 5, op = '1'):
         '''
@@ -163,24 +202,28 @@ class Dianzan_verify(Dianzan):
 
     def verify(self, data, headers):
         print data
+        self.url = self._verify(data = data, headers = headers)
+        self.verify = None
 
+        '''代码重复了，写到了父类的_verify方法里面去了统一处理需要验证码时的情况
         url = data.pop('url')
         res = self.session.post(url, data = data, headers = headers, allow_redirects = False)
-        print '1' + str(res.content)
+        #print '1' + str(res.content)
         url = res.headers['location']
 
         #验证码后第一次get
         content = self.session.get(url).content
-        print '2' + content
+        #print '2' + content
         url = self._parse(None, '/wml/card/@ontimer', content = content)[0].content
 
         #验证码后第二次get
         content = self.session.get(url).content
-        print '3' + content
+        #print '3' + content
         url = self._parse(None, '/wml/card/@ontimer', content = content)[0].content
 
         self.verify = None
         self.url = url
+        '''
 
 
 if __name__ == "__main__":
