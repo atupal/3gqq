@@ -188,7 +188,9 @@ class Dianzan:
             urls = self._parse(None, '//*/@href', content = content)
             for url in urls:
                 if url.content.find('like_action') != -1 and url.content[-1] == op:
-                    print self.session.get(url.content).content
+                    ret = self.session.get(url.content).content
+                    if ret.find('成功') != -1:
+                        print '赞成功'
 
             urls = self._parse(None, '//*/@href', content = content)
             for url in urls:
