@@ -26,7 +26,11 @@ def _dianzan():
     qq = request.form.get('qq')
     pwd = request.form.get('pwd')
     D = dianzan.Dianzan(qq = qq, pwd = pwd)
-    return D.dianzan()
+    try:
+        ret = D.dianzan()
+    except Exception as e:
+        ret = e
+    return ret
 
 @app.route('/dianzan_verify', methods = ['POST'])
 def _dianzan_verify():
@@ -43,4 +47,8 @@ def _dianzan_verify():
     for i in request.form:
         data[i] = request.form[i]
     D.verify(data = data, headers = headers)
-    return D.dianzan()
+    try:
+        ret = D.dianzan()
+    except Exception as e:
+        ret = e
+    return ret
