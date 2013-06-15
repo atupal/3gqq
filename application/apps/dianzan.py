@@ -144,17 +144,19 @@ class Dianzan:
         if not url:
             url = data.pop('url')
         res = self.session.post(url, data = data, headers = headers, allow_redirects = False)
-        #print '1' + str(res.content)
+        print '1' + str(res.content)
         url = res.headers['location']
 
         #验证码后第一次get
         content = self.session.get(url).content
-        #print '2' + content
+        print '2' + content
         url = self._parse(None, '/wml/card/@ontimer', content = content)[0].content
 
         #验证码后第二次get
         content = self.session.get(url).content
-        #print '3' + content
+        print '3' + content
+
+        #有的账号会再跳转一次，有的不会,算个bug吧
         try:
             url_tmp = self._parse(None, '/wml/card/@ontimer', content = content)[0].content
         except:
