@@ -73,12 +73,12 @@ def index():
 def _dianzan():
     if request.method != 'POST':
         return 'methods not allowed!'
-    qq = request.form.get('qq')
-    pwd = request.form.get('pwd')
-    #cnt = request.form.get('cnt')
-    #feq = request.form.get('feq')
-    #inc = request.form.get('inc')
     try:
+        qq = request.form.get('qq')
+        pwd = request.form.get('pwd')
+        #cnt = request.form.get('cnt')
+        #feq = request.form.get('feq')
+        #inc = request.form.get('inc')
         D = dianzan.Dianzan(qq = qq, pwd = pwd)
         ret = D.dianzan(cnt = 5)
     except Exception as e:
@@ -98,9 +98,9 @@ def _dianzan_verify():
     headers['User-Agent'] = ''
 
     data = dict()
-    for i in request.form:
-        data[i] = request.form[i]
     try:
+        for i in request.form:
+            data[i] = request.form[i]
         D = dianzan.Dianzan_verify()
         D.verify(data = data, headers = headers)
         ret = D.dianzan()
