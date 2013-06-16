@@ -233,4 +233,11 @@ if __name__ == "__main__":
     qq = raw_input('qq:')
     pwd = raw_input('pwd:')
     D = Dianzan(qq = qq, pwd = pwd)
-    D.dianzan()
+    import time
+    while 1:
+        try:
+            D.dianzan(cnt = 1)
+        except Exception as e:
+            print e
+        print '****'
+        time.sleep(300)

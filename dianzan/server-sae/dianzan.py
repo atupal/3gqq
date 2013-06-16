@@ -13,11 +13,14 @@ import xpath
 
 __metaclass__ = type
 class Dianzan:
-    def __init__(self, qq = None, pwd = None):
+    def __init__(self, qq = None, pwd = None, feq = 1, inc = 5):
         self.qq = 'atupal@foxmail.com' if not qq else qq
         self.pwd = 'xxxxx' if not pwd else pwd
+        self.feq = feq
+        self.inc = inc
         self.session = requests.Session()
         self._login()
+        self.repeat_set = set()
 
     def _parse(self, url, _xpath, content = None):
         try:
@@ -182,18 +185,24 @@ class Dianzan:
         if url:
             feed_url = url[0].content
         for i in xrange(cnt):
-            print feed_url
+            print "feed_url:" + feed_url
             content = self.session.get(feed_url).content
 
             urls = self._parse(None, '//*/@href', content = content)
             for url in urls:
                 if url.content.find('like_action') != -1 and url.content[-1] == op:
-                    print self.session.get(url.content).content
+                    if self.repeat_set.issuperset({url.content}):
+                        continue
+                    ret = self.session.get(url.content).content
+                    if ret.find('成功') != -1:
+                        print '赞成功'
+                    self.repeat_set.add(url.content)
 
-            urls = self._parse(None, '//*/@href', content = content)
+            urls = self._parse(None, '//*[text()="更多好友动态>>" or text()="下页"]/@href', content = content)
             for url in urls:
-                if url.content.find('feeds_friends') != -1 and url.content.find('dayval=1') != -1:
-                    feed_url = url.content
+                #if url.content.find('feeds_friends') != -1 or url.content.find('dayval=1') != -1:
+                feed_url = url.content
+
         return 'success'
 
 class Dianzan_verify(Dianzan):
@@ -230,4 +239,11 @@ if __name__ == "__main__":
     qq = raw_input('qq:')
     pwd = raw_input('pwd:')
     D = Dianzan(qq = qq, pwd = pwd)
-    D.dianzan()
+    import time
+    while 1:
+        try:
+            D.dianzan(cnt = 1)
+        except Exception as e:
+            print e
+        print '****'
+        time.sleep(300)

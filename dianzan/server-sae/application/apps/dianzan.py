@@ -13,9 +13,11 @@ import xpath
 
 __metaclass__ = type
 class Dianzan:
-    def __init__(self, qq = None, pwd = None):
+    def __init__(self, qq = None, pwd = None, feq = 1, inc = 5):
         self.qq = 'atupal@foxmail.com' if not qq else qq
         self.pwd = 'xxxxx' if not pwd else pwd
+        self.feq = feq
+        self.inc = inc
         self.session = requests.Session()
         self._login()
 
@@ -182,18 +184,21 @@ class Dianzan:
         if url:
             feed_url = url[0].content
         for i in xrange(cnt):
-            print feed_url
+            print "feed_url:" + feed_url
             content = self.session.get(feed_url).content
 
             urls = self._parse(None, '//*/@href', content = content)
             for url in urls:
                 if url.content.find('like_action') != -1 and url.content[-1] == op:
-                    print self.session.get(url.content).content
+                    ret = self.session.get(url.content).content
+                    if ret.find('成功') != -1:
+                        print '赞成功'
 
-            urls = self._parse(None, '//*/@href', content = content)
+            urls = self._parse(None, '//*[text()="更多好友动态>>" or text()="下页"]/@href', content = content)
             for url in urls:
-                if url.content.find('feeds_friends') != -1 and url.content.find('dayval=1') != -1:
-                    feed_url = url.content
+                #if url.content.find('feeds_friends') != -1 or url.content.find('dayval=1') != -1:
+                feed_url = url.content
+
         return 'success'
 
 class Dianzan_verify(Dianzan):
