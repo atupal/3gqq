@@ -13,9 +13,11 @@ import xpath
 
 __metaclass__ = type
 class Dianzan:
-    def __init__(self, qq = None, pwd = None):
+    def __init__(self, qq = None, pwd = None, feq = 1, inc = 5):
         self.qq = 'atupal@foxmail.com' if not qq else qq
         self.pwd = 'xxxxx' if not pwd else pwd
+        self.feq = feq
+        self.inc = inc
         self.session = requests.Session()
         self._login()
 
