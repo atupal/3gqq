@@ -56,6 +56,7 @@ def index():
                 <br>
                 <input type="submit" value="confirm" class="bt">
             </form>
+            <p>web版的点赞次数和间隔还没实现,等考试完再弄吧</p>
 
 
             <div class="github-fork-ribbon-wrapper right">
