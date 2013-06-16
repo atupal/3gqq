@@ -53,6 +53,7 @@ def index():
                 <option value="fiat">60</option>
                 <option value="audi">120</option>
                 </select>
+                <br>
                 <input type="submit" value="confirm" class="bt">
             </form>
 
