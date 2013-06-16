@@ -57,6 +57,7 @@ def index():
                 <input type="submit" value="confirm" class="bt">
             </form>
             <p>web版的点赞次数和间隔还没实现,等考试完再弄吧</p>
+            <strong>很多人问我有没有记录密码,,,没有,没有记录任何东西,你可以看下源代码(右上角)</strong>
 
 
             <div class="github-fork-ribbon-wrapper right">
