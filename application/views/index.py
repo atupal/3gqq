@@ -25,8 +25,38 @@ def index():
                 <br/>
                 <input name="pwd" type="password" placeholder="Password">
                 <br/>
+
+                <label>点赞页数</label>
+                <select name="cnt">
+                <option value="volvo">1</option>
+                <option value="volvo">2</option>
+                <option value="saab">3</option>
+                <option value="fiat">4</option>
+                <option value="audi">5</option>
+                </select>
+
+                <label>点赞次数</label>
+                <select name="feq">
+                <option value="volvo">1</option>
+                <option value="volvo">5</option>
+                <option value="saab">10</option>
+                <option value="fiat">20</option>
+                <option value="audi">50</option>
+                <option value="audi">100</option>
+                </select>
+
+                <label>点赞间隔(min)</label>
+                <select name="inc">
+                <option value="volvo">5</option>
+                <option value="volvo">10</option>
+                <option value="saab">30</option>
+                <option value="fiat">60</option>
+                <option value="audi">120</option>
+                </select>
                 <input type="submit" value="confirm" class="bt">
             </form>
+
+
             <div class="github-fork-ribbon-wrapper right">
                 <div class="github-fork-ribbon">
                     <a href="https://github.com/atupal/3gqq/blob/master/dianzan/dianzan_py-dom-xpath.py">Fork me on GitHub</a>
