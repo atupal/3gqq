@@ -73,12 +73,12 @@ def _dianzan():
         return 'methods not allowed!'
     qq = request.form.get('qq')
     pwd = request.form.get('pwd')
-    cnt = request.form.get('cnt')
-    feq = request.form.get('feq')
-    inc = request.form.get('inc')
+    #cnt = request.form.get('cnt')
+    #feq = request.form.get('feq')
+    #inc = request.form.get('inc')
     try:
-        D = dianzan.Dianzan(qq = qq, pwd = pwd, feq = int(feq), inc = int(inc))
-        ret = D.dianzan(cnt = int(cnt))
+        D = dianzan.Dianzan(qq = qq, pwd = pwd)
+        ret = D.dianzan(cnt = 5)
     except Exception as e:
         ret = e
         ret += "<hr/>"
