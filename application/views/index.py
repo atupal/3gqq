@@ -34,7 +34,7 @@ def index():
                 <option value="fiat">4</option>
                 <option value="audi">5</option>
                 </select>
-
+                <br>
                 <label>点赞次数</label>
                 <select name="feq">
                 <option value="volvo">1</option>
@@ -44,7 +44,7 @@ def index():
                 <option value="audi">50</option>
                 <option value="audi">100</option>
                 </select>
-
+                <br>
                 <label>点赞间隔(min)</label>
                 <select name="inc">
                 <option value="volvo">5</option>
