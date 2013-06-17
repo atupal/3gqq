@@ -69,7 +69,7 @@ def index():
     </html>
     '''
 
-import logging
+#import logging
 @app.route('/dianzan', methods = ['POST'])
 def _dianzan():
     if request.method != 'POST':
@@ -83,7 +83,8 @@ def _dianzan():
         D = dianzan.Dianzan(qq = qq, pwd = pwd)
         ret = D.dianzan(cnt = 5)
     except Exception as e:
-        logging.error(str(e))
+        #logging.error(str(e))
+        print str(e)
         ret = str(e)
         ret += "<hr/>"
         ret += "<p>%s</p>"%("用户名，密码错误，请再试一次")
@@ -107,7 +108,8 @@ def _dianzan_verify():
         D.verify(data = data, headers = headers)
         ret = D.dianzan()
     except Exception as e:
-        logging.error(str(e) + str(data))
+        #logging.error(str(e) + str(data))
+        print str(e) + str(data)
         ret = str(e)
         ret += "<hr/>"
         ret += "<p>%s</p>"%("用户名，密码或者验证码错误!请再试一次")
