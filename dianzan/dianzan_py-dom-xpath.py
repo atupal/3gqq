@@ -13,11 +13,14 @@ import xpath
 
 __metaclass__ = type
 class Dianzan:
-    def __init__(self, qq = None, pwd = None):
+    def __init__(self, qq = None, pwd = None, feq = 1, inc = 5):
         self.qq = 'atupal@foxmail.com' if not qq else qq
         self.pwd = 'xxxxx' if not pwd else pwd
+        self.feq = feq
+        self.inc = inc
         self.session = requests.Session()
         self._login()
+        self.repeat_set = set()
 
     def _parse(self, url, _xpath, content = None):
         try:
@@ -188,9 +191,12 @@ class Dianzan:
             urls = self._parse(None, '//*/@href', content = content)
             for url in urls:
                 if url.content.find('like_action') != -1 and url.content[-1] == op:
+                    if self.repeat_set.issuperset({url.content}):
+                        continue
                     ret = self.session.get(url.content).content
                     if ret.find('成功') != -1:
                         print '赞成功'
+                    self.repeat_set.add(url.content)
 
             urls = self._parse(None, '//*[text()="更多好友动态>>" or text()="下页"]/@href', content = content)
             for url in urls:
