@@ -20,6 +20,7 @@ class Dianzan:
         self.inc = inc
         self.session = requests.Session()
         self._login()
+        self.repeat_set = set()
 
     def _parse(self, url, _xpath, content = None):
         try:
@@ -190,9 +191,12 @@ class Dianzan:
             urls = self._parse(None, '//*/@href', content = content)
             for url in urls:
                 if url.content.find('like_action') != -1 and url.content[-1] == op:
+                    if self.repeat_set.issuperset({url.content}):
+                        continue
                     ret = self.session.get(url.content).content
                     if ret.find('成功') != -1:
                         print '赞成功'
+                    self.repeat_set.add(url.content)
 
             urls = self._parse(None, '//*[text()="更多好友动态>>" or text()="下页"]/@href', content = content)
             for url in urls:
@@ -235,4 +239,11 @@ if __name__ == "__main__":
     qq = raw_input('qq:')
     pwd = raw_input('pwd:')
     D = Dianzan(qq = qq, pwd = pwd)
-    D.dianzan()
+    import time
+    while 1:
+        try:
+            D.dianzan(cnt = 1)
+        except Exception as e:
+            print e
+        print '****'
+        time.sleep(300)
