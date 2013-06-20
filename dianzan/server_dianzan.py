@@ -95,7 +95,7 @@ class Dianzan:
             import os
             if os.environ.get('HOME') == '/home/atupal':
                 import time
-                time.sleep(60)
+                time.sleep(70)
                 with open('verify', 'r') as fi:
                     #data['verify'] = raw_input("verify:")
                     data['verify'] = fi.readline().strip('\n')

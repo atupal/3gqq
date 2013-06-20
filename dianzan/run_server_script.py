@@ -17,12 +17,17 @@ import os
 os.system('scp -P 56369 server_dianzan.py atupal@168.63.179.223:~/ts.py')
 
 stdin, stdout, stderr = client.exec_command('pkill -9 python')
+stdin, stdout, stderr = client.exec_command('cat nohup.out')
+print stdout.read()
+stdin, stdout, stderr = client.exec_command('rm nohup.out')
 stdin, stdout, stderr = client.exec_command('nohup python ts.py &')
-
-client.close()
 
 #import subprocess
 #P = subprocess.Popen()
+
+print 'begin'
+import time
+time.sleep(10)
 
 os.system('scp -P 56369  atupal@168.63.179.223:~/img.jpg img.gif')
 
@@ -34,3 +39,6 @@ with open('verify', 'w') as fi:
     fi.write(raw_input('verify:'))
 
 os.system('scp -P 56369  verify atupal@168.63.179.223:~/verify')
+
+time.sleep(60)
+client.close()
