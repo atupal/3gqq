@@ -1,2 +1,6 @@
 img.gif
 verify
+user
+cookie
+*.cookie
+cookie.*
