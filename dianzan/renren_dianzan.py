@@ -114,6 +114,7 @@ class RenrenDianzan():
         for  r in res:
             import random
             r= r.replace("'", '').split(',')
+            if r[0] not in type_id.keys():continue
             url = ('http://like.renren.com/addlike?' +
             'gid='+r[0] + '_' + r[1] +
             '&uid=%s' % r[2] +

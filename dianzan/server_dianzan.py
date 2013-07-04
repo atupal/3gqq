@@ -240,8 +240,10 @@ class Dianzan_verify(Dianzan):
         '''
 
 if __name__ == "__main__":
-    qq = 'atupal@foxmail.com'
-    pwd = 'Hacker@atupal'
+    with open('./user', 'r') as fi:
+        qq = fi.readline().strip('\n')
+        pwd = fi.readline().strip('\n')
+
     D = Dianzan(qq = qq, pwd = pwd)
 
     cnt = 0
