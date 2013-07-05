@@ -34,6 +34,8 @@ import lxml.html
 #from pprint import pprint as printf
 import urllib
 import logging
+import unittest
+import MySQLdb
 
 try:
     import sae.const
@@ -55,7 +57,53 @@ try:
     MYSQL_HOST_S = sae.const.MYSQL_HOST_S
 
 except:
-    pass
+    import ConfigParser
+    config = ConfigParser.RawConfigParser()
+    with open('/home/atupal/src/github/3gqq/dianzan/server-sae/env.cfg','r') as fi:
+        config.readfp(fi)
+        MYSQL_DB     = config.get('mysql', 'MYSQL_DB')
+        MYSQL_USER   = config.get('mysql', 'MYSQL_USER')
+        MYSQL_PASS   = config.get('mysql', 'MYSQL_PASS')
+        MYSQL_HOST   = config.get('mysql', 'MYSQL_HOST')
+        MYSQL_PORT   = config.get('mysql', 'MYSQL_PORT')
+        MYSQL_HOST_S = config.get('mysql', 'MYSQL_HOST_S')
+
+
+db = None
+
+def init_db():
+    global db
+    db = MySQLdb.connect(host = MYSQL_HOST, port = int(MYSQL_PORT), db = MYSQL_DB , user = MYSQL_USER, passwd = MYSQL_PASS )
+
+def create_table():
+    cursor = db.cursor()
+    cursor.execute(r'''
+    create table task
+        (
+                id int unsigned not null auto_increment primary key,
+                uid char(50),
+                ttl int default 0,
+                url char(250),
+                inc int default 10,
+                pos text(1000) default "",
+                neg text(1000) default "",
+                frr text(5000) default "",
+                message char(100)
+        );
+            ''')
+
+
+
+def add_task(uid, url, ttl = 10, inc = 10, pos = "", neg = "", frr = ""):
+    cursor = db.cursor()
+    cursor.execute(r'''
+        insert task (uid, ttl, url, inc, pos, neg, frr) values (%d, %d, "%s", %d, "%s", "%s", "%s");
+            ''' % (uid, ttl, url, inc, pos, neg, frr) )
+    db.commit()
+
+init_db()
+create_table()
+
 
 __metaclass__ = type
 class Dianzan:
@@ -367,11 +415,25 @@ class Dianzan_verify(Dianzan):
         self.url = self._verify(data = data, headers = headers)
         self.verify = None
 
+class DianzanTest(unittest.TestCase):
+    def setUp(self):
+        pass
+
+    def tearDown(self):
+        pass
+
+    def _test_db(self):
+        init_db()
+        add_task(uid = 1, url = 'http://test.com')
+
+    def _test_dianzan(self):
+        #qq = raw_input('qq:')
+        #pwd = raw_input('pwd:')
+        qq = 'atupal@qq.com'
+        pwd = 'atupal@qq.com'
+        D = Dianzan(qq = qq, pwd = pwd)
+        D.dianzan(cnt = 1)
+
 
 if __name__ == "__main__":
-    #qq = raw_input('qq:')
-    #pwd = raw_input('pwd:')
-    qq = 'atupal@qq.com'
-    pwd = 'atupal@qq.com'
-    D = Dianzan(qq = qq, pwd = pwd)
-    D.dianzan(cnt = 1)
+    unittest.main()
