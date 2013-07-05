@@ -5,5 +5,9 @@ version: 1
 handlers:
 - url: /static/
   static_path: application/static
+
+libraries:
+- name: lxml.html
+  version: "2.3.4"
 ...
 

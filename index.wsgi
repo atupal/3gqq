@@ -2,6 +2,8 @@
 import os, sys
 sys.path.append(os.path.realpath(__file__))
 
+
+
 from application import app
 
 #def app(environ, start_response):
@@ -15,3 +17,5 @@ if "HOME" in os.environ.keys() and os.environ['HOME'] == "/home/atupal":
 else:
     import sae
     application = sae.create_wsgi_app(app)
+
+
