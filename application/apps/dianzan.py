@@ -101,10 +101,6 @@ def add_task(uid, url, ttl = 10, inc = 10, pos = "", neg = "", frr = ""):
             ''' % (uid, ttl, url, inc, pos, neg, frr) )
     db.commit()
 
-init_db()
-create_table()
-
-
 __metaclass__ = type
 class Dianzan:
     '''
