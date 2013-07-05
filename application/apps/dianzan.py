@@ -326,9 +326,9 @@ class Dianzan:
             print "feed_url:" + feed_url
             content = self.session.get(feed_url).content
 
-            #urls = self._parse(None, '//*/@href', content = content)
-            return self.get_friend()
-
+            urls = self._parse(None, '//*/@href', content = content)
+            import json
+            return jsom.dumps( (self.get_friend() )
 
             for url in urls:
                 if url.content.find('like_action') != -1 and url.content[-1] == op:
