@@ -7,7 +7,7 @@ handlers:
   static_path: application/static
 
 libraries:
-- name: lxml.html
+- name: lxml
   version: "2.3.4"
 ...
 
