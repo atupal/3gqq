@@ -328,7 +328,8 @@ class Dianzan:
 
             urls = self._parse(None, '//*/@href', content = content)
             import json
-            return jsom.dumps( (self.get_friend() )
+            return json.dumps( self.get_friend() )
+
 
             for url in urls:
                 if url.content.find('like_action') != -1 and url.content[-1] == op:
