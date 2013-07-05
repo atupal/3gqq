@@ -1,4 +1,24 @@
-# -*- coding=utf-8 -*-
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+#
+#  author : atupal
+#
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program; if not, write to the Free Software
+#  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+#  MA 02110-1301, USA.
+#
+#  site: http://atupal.org
 
 import requests
 #import libxml2 as xparse
@@ -10,18 +30,61 @@ sys.setdefaultencoding('utf-8')
 
 from xml.dom.minidom import parseString
 import xpath
+import lxml.html
+#from pprint import pprint as printf
+import urllib
+import logging
+
+try:
+    import sae.const
+
+    '''
+    sae.const.MYSQL_DB      # 数据库名
+    sae.const.MYSQL_USER    # 用户名
+    sae.const.MYSQL_PASS    # 密码
+    sae.const.MYSQL_HOST    # 主库域名（可读写）
+    sae.const.MYSQL_PORT    # 端口，类型为，请根据框架要求自行转换为int
+    sae.const.MYSQL_HOST_S  # 从库域名（只读）
+    '''
+
+    MYSQL_DB     = sae.const.MYSQL_DB
+    MYSQL_USER   = sae.const.MYSQL_USER
+    MYSQL_PASS   = sae.const.MYSQL_PASS
+    MYSQL_HOST   = sae.const.MYSQL_HOST
+    MYSQL_PORT   = sae.const.MYSQL_PORT
+    MYSQL_HOST_S = sae.const.MYSQL_HOST_S
+
+except:
+    pass
 
 __metaclass__ = type
 class Dianzan:
-    def __init__(self, qq = None, pwd = None, feq = 1, inc = 5):
+    '''
+        qq         : qq帐号, 邮箱格式数字格式均可
+        pwd        : 密码, 测试帐号和密码是保存在当前目录下的user文集中
+        feq        : 点赞频率
+        inc        : 点赞的时间增量(即间隔)
+        cnt        : 点赞的页数
+        session    : 保存了用户cookie的session对象(requests.Session)
+        repeat_set : 由于空间存在一些无法点赞或者没有权限点赞的content, 所以加个hash表判断下
+        url        : 用户的主feed页面(带书签)
+    '''
+
+    def __init__(self, qq = None, pwd = None, feq = 1, inc = 10, cnt = 1):
         self.qq = 'atupal@foxmail.com' if not qq else qq
         self.pwd = 'xxxxx' if not pwd else pwd
         self.feq = feq
         self.inc = inc
+        self.cnt = cnt
         self.session = requests.Session()
         self._login()
+        self.repeat_set = set()
 
     def _parse(self, url, _xpath, content = None):
+        '''
+            由content或者url  以及相应的xpath的返回结果
+        '''
+
         try:
             if not content:content = self.session.get(url).content
             #doc = xparse.parseDoc(content)
@@ -39,8 +102,21 @@ class Dianzan:
             #doc.freeDoc()
             pass
 
+    def lxml_parse(self, url, _xpath, content = None):
+        try:
+            if not content: content = self.session.get(url).content
+            ret = lxml.html.fromstring(content).xpath(_xpath)
+            return ret
+        except Exception as e:
+            logging.error('lxml_parse:' + str(e))
+            return None
+
 
     def _login(self):
+        '''
+            空间登录, 获取用户的一个书签, 指向的是主feed页面, 保存为self.url
+        '''
+
         url = 'http://info50.3g.qq.com/g/s?aid=index&s_it=1&g_from=3gindex&&g_f=1283' #3gqq首页
         url = self._parse(url, '/wml/card/p/a[7]/@href')[0].content  #空间登陆url
         url = self._parse(url, '/wml/card/@ontimer')[0].content  #空间登陆302url
@@ -66,6 +142,9 @@ class Dianzan:
         url = res.headers['location']#post之后重定向的地址，这里如果允许自动跳转的话不知道为什么会跳转到腾讯首页去。。蛋疼
 
         if not url:
+            '''
+                碰到需要验证码的情况了, 一般是第一次登录的ip会需要, 再者是异常的ip, 比如登录了很多个qq的sae服务器
+            '''
             data = dict()
             img_url = self._parse(None, '//img/@src', content = res.content)[0].content
             names = [
@@ -94,27 +173,7 @@ class Dianzan:
             if os.environ.get('HOME') == '/home/atupal':
                 data['verify'] = raw_input("verify:")
                 url = self._verify(data = data, headers = headers, url = url)
-                '''#代码重复了，发送验证码的实现逻辑由_verrify方法实现
-                res = self.session.post(url, data = data, headers = headers, allow_redirects = False)
-                #print '1' + str(res.content)
-                url = res.headers['location']
 
-                ##验证码后第一次get
-                #url = self._parse(url, '/wml/card/@ontimer')[0].content
-
-                ##验证码后第二次get
-                #url = self._parse(url, '/wml/card/@ontimer')[0].content
-
-                #验证码后第一次get
-                content = self.session.get(url).content
-                #print '2' + content
-                url = self._parse(None, '/wml/card/@ontimer', content = content)[0].content
-
-                #验证码后第二次get
-                content = self.session.get(url).content
-                #print '3' + content
-                url = self._parse(None, '/wml/card/@ontimer', content = content)[0].content
-                '''
             else:
                 form = '<form action="/dianzan_verify" method="post">'
                 for i in data:
@@ -139,10 +198,21 @@ class Dianzan:
         self.verify = None
         self.url = url
 
-        #print self.session.get(url).content
+        feed_url = self.url
+        url = self._parse(feed_url, '/wml/card/@ontimer') #不知道为什么换了一个qq号的时候这里会多加一个跳转
+        if url:
+            feed_url = url[0].content
+
+        self.url = feed_url
+
 
         #至此已经登陆成功了
+
     def _verify(self, data, headers, url = None):
+        '''
+            提交验证码,完成登录步骤
+        '''
+
         if not url:
             url = data.pop('url')
         res = self.session.post(url, data = data, headers = headers, allow_redirects = False)
@@ -165,7 +235,73 @@ class Dianzan:
             url_tmp = None
         if url_tmp:
             url = url_tmp
-        return url
+
+        return self.url
+
+    def get_zan_datail(self, content):
+        '''
+            获取说说的uid和content以及url
+            ret: 生成器, 元素为一个三元tuple: ( url, content, uid )
+        '''
+        xparser = lxml.html.fromstring(content)
+        filt = lambda x:x.values() and x.values()[0].find('like_action') != -1 and x.values()[0][-1] == '0'
+        urls = filter(filt, xparser.xpath('//a') )
+
+
+        for url in urls:
+            try:zan_url = url.values()[0]
+            except:zan_url = ''
+            try:
+                html_ele = url.getnext().getnext().values()[0]
+            except:
+                html_ele = ''
+
+            ind = html_ele.find('mood_con=') + len('mood_con=')
+            zan_content = urllib.unquote(html_ele[ind:])
+
+            ind_begin = html_ele.find('mood_uin=') + len('mood_uin=')
+            ind_end = html_ele.find('&mood_id')
+
+            zan_uid = html_ele[ind_begin:ind_end]
+
+            yield zan_url, zan_content, zan_uid
+
+    def get_friend(self):
+        '''
+            获取好友列表, 默认是全部点赞的, 设置为只对某些好友点赞后就得获取好友列表了
+        '''
+        #string = '好友'.decode('utf-8').encode('ascii', 'xmlcharrefreplace')
+        url_ele = self.lxml_parse(url = self.url, _xpath = '//a[text()="%s"]' % u'好友')
+        try:
+            friend = {}
+            url = url_ele[0].values()[0]
+            all_friend_url = self.lxml_parse(url, _xpath = '//a[text()="%s"]' % u'全部' )[0].values()[0]
+            cnt = 0
+            while all_friend_url:
+                cnt += 1
+                content = self.session.get(all_friend_url).content
+                urls = self.lxml_parse(url = None, _xpath = '//a' ,content = content)
+                for url in urls:
+                    tmp = url
+                    url = url.values()[0]
+                    '''
+                    http://blog60.z.qq.com/blog.jsp?B_UID=158839520&amp;sid=AR8VO35GzIJG_OWjm9obXweE
+                    '''
+                    if url.startswith('http://blog60.z.qq.com/blog.jsp?') and url.find("B_UID") != -1 and url.count('&') == 1:
+                        begin = url.find('B_UID=') + len('B_UID=')
+                        end = url.find('&sid')
+                        if tmp.text != u'主页':
+                            friend[url[begin:end]] = tmp.text
+
+                try:all_friend_url = self.lxml_parse(url = None, content = content, _xpath = '//a[text()="%s"]' % u'下页' )[0].values()[0]
+                except Exception as e:logging.error("next_page:" + str(e));all_friend_url=[]
+
+            return friend
+
+        except Exception as e:
+            return {}
+            logging.error('get_griend' + str(e))
+            pass
 
 
     def dianzan(self, cnt = 5, op = '1'):
@@ -180,19 +316,29 @@ class Dianzan:
             return self.verify
 
         feed_url = self.url
-        url = self._parse(feed_url, '/wml/card/@ontimer') #不知道为什么换了一个qq号的时候这里会多加一个跳转
-        if url:
-            feed_url = url[0].content
+        #url = self._parse(feed_url, '/wml/card/@ontimer') #不知道为什么换了一个qq号的时候这里会多加一个跳转
+        #if url:
+        #    feed_url = url[0].content
+
+        #self.url = feed_url
+
         for i in xrange(cnt):
             print "feed_url:" + feed_url
             content = self.session.get(feed_url).content
 
-            urls = self._parse(None, '//*/@href', content = content)
+            #urls = self._parse(None, '//*/@href', content = content)
+            self.get_friend()
+
+            return
+
             for url in urls:
                 if url.content.find('like_action') != -1 and url.content[-1] == op:
+                    if self.repeat_set.issuperset({url.content}):
+                        continue
                     ret = self.session.get(url.content).content
                     if ret.find('成功') != -1:
                         print '赞成功'
+                    self.repeat_set.add(url.content)
 
             urls = self._parse(None, '//*[text()="更多好友动态>>" or text()="下页"]/@href', content = content)
             for url in urls:
@@ -201,8 +347,19 @@ class Dianzan:
 
         return 'success'
 
+
+    def add_tast(self):
+        '''
+            添加 任务
+        '''
+
+        pass
+
 class Dianzan_verify(Dianzan):
     def __init__(self):
+        '''
+            覆盖掉父类的构造方法, 防止执行父类构造方法中的_login函数
+        '''
         self.session = requests.Session()
 
     def verify(self, data, headers):
@@ -210,29 +367,11 @@ class Dianzan_verify(Dianzan):
         self.url = self._verify(data = data, headers = headers)
         self.verify = None
 
-        '''代码重复了，写到了父类的_verify方法里面去了统一处理需要验证码时的情况
-        url = data.pop('url')
-        res = self.session.post(url, data = data, headers = headers, allow_redirects = False)
-        #print '1' + str(res.content)
-        url = res.headers['location']
-
-        #验证码后第一次get
-        content = self.session.get(url).content
-        #print '2' + content
-        url = self._parse(None, '/wml/card/@ontimer', content = content)[0].content
-
-        #验证码后第二次get
-        content = self.session.get(url).content
-        #print '3' + content
-        url = self._parse(None, '/wml/card/@ontimer', content = content)[0].content
-
-        self.verify = None
-        self.url = url
-        '''
-
 
 if __name__ == "__main__":
-    qq = raw_input('qq:')
-    pwd = raw_input('pwd:')
+    #qq = raw_input('qq:')
+    #pwd = raw_input('pwd:')
+    qq = 'atupal@qq.com'
+    pwd = 'atupal@qq.com'
     D = Dianzan(qq = qq, pwd = pwd)
-    D.dianzan()
+    D.dianzan(cnt = 1)
