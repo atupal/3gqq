@@ -35,7 +35,7 @@ def _dianzan():
         neg = request.form.get('neg', '')
 
         try:D = dianzan.Dianzan(qq = qq, pwd = pwd, cnt = int(cnt), feq = int(feq), inc = int(inc))
-        except Exception as e: print e
+        except Exception as e: print e; traceback.print_exc(file = sys.stdout)
 
         if str(frr) == "on":
             return 'coding , please wait'
