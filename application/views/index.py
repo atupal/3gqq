@@ -57,6 +57,7 @@ def _dianzan():
         #logging.error(str(e))
         print str(e)
         ret = str(e)
+        traceback.print_exc(file=sys.stdout)
         ret += "<hr/>"
         ret += "<p>%s</p>"%("用户名，密码错误，请再试一次")
     return ret
