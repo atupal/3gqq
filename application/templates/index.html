@@ -106,12 +106,9 @@
 
 {%  for c in comments %}
 <div>
-    <label> nickname: </label>
-    <pre> {{c[0]}}  </pre>
-    <label> contact: </label>
-    <pre> {{c[1]}}  </pre>
-    <label> comment: </label>
-    <pre> {{c[2]}}  </pre>
+    <pre>nickname: {{c[0]}}  </pre>
+    <pre>contact: {{c[1]}}  </pre>
+    <pre>comment {{c[2]}}  </pre>
     <hr />
 </div>
 {% endfor %}
