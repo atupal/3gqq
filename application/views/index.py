@@ -21,7 +21,7 @@ import traceback
 def index():
     db = init_db()
     cursor = db.cursor()
-    cursor.execute('''select * from feedback''')
+    cursor.execute('''select * from feedback order by id DESC''')
     ret = cursor.fetchall()
     try:ret_list = [ [ _[1] , _[2], _[3] ] for _ in ret ]
     except:ret_list = [ ['error', 'error', 'error'] ]
