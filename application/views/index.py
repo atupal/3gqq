@@ -120,7 +120,7 @@ def feedback():
     contact = MySQLdb.escape_string(contact)
     comment = MySQLdb.escape_string(comment)
     sql = r'''
-                insert feedback (nickname, cnotact, comment) values ("%s", "%s", "%s");
+                insert feedback (nickname, contact, comment) values ("%s", "%s", "%s");
         ''' % (nickname, contact, comment)
     cursor = db.cursor()
     cursor.execute(sql)
