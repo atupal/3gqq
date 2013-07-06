@@ -372,7 +372,7 @@ class DianzanTest(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test_db(self):
+    def _test_db(self):
         db = init_db()
         add_task(db, uid = 'ts', url = 'ts')
 

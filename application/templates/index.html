@@ -16,11 +16,16 @@
 
 <body>
 <form id="login" action="/dianzan" method="post" onsubmit="remaind()">
+
+    <p>
+    <strong>妈蛋, 正在开发新功能, 再这个提示没消失前使用点赞机您可能不会看到您期望的结果 </strong>
+    </p>
+
     <input name="qq" type="text" placeholder="qq">
     <br/>
     <input name="pwd" type="password" placeholder="Password">
     <br/>
-
+    
     <label>点赞页数</label>
     <select name="cnt">
         <option value="1">1</option>
@@ -52,6 +57,14 @@
     </select>
     <br />
     <label>选择指定点赞好友</label><input type="checkbox" name="frr" id="frr" />
+    <br />
+    <label>出现以下词语就点赞(词条间请用|分开,词条会strip空格)</label>
+    <br />
+    <input type="text" name="pos" />
+    <br />
+    <label>出现以下词语就不点赞(优先级低于上面的)</label>
+    <br />
+    <input type="text" name="neg" />
     <br />
     <input type="submit" value="confirm" class="bt" >
 </form>

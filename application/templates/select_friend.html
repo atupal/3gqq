@@ -1,0 +1,23 @@
+
+{% extends 'layout.html' %}
+
+{% block body %}
+
+
+<form action="/select_friend", method="POST">
+    <label>全选</label><input type="checkbox"  onclick="all_select(this)" /> 
+    <label>勾选你要赞的好友 (如果人数不对,请刷新, 而且以后用户再次登录时将使用相同的设置)</label>
+    <hr />
+    {% for i in frr %} 
+    <label>{{ i }} ( {{frr[i]}} ) </label> <input type="checkbox" name="frr"> <br />
+    {% endfor %}
+
+</form>
+
+<script>
+var all_select = function(checkbox) {
+    alert('hhehe');
+}
+</script>
+
+{% endblock %}

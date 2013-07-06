@@ -9,10 +9,12 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
-from application.apps.db_methods import init_db
 from application.apps.db_methods import add_task
+from application.apps.db_methods import init_db
 import logging
 import traceback
+
+#from application import db
 
 
 @app.route('/')
@@ -37,8 +39,6 @@ def _dianzan():
         try:D = dianzan.Dianzan(qq = qq, pwd = pwd, cnt = int(cnt), feq = int(feq), inc = int(inc))
         except Exception as e: print e; traceback.print_exc(file = sys.stdout)
 
-        if str(frr) == "on":
-            return 'coding , please wait'
 
         ret = D.dianzan(cnt = int(cnt))
 
@@ -53,13 +53,26 @@ def _dianzan():
             logging.error('/dianzan:' + str(e))
             traceback.print_exc(file=sys.stdout)
 
+        if str(frr) == "on":
+            try:ret = D.get_friend()
+            except:ret={}
+            if len(ret) == 0:
+                return '''
+                        <html>
+                        <body>
+                            </p>妈蛋, 好像获取好友列表失败了,<a href="/">再试一次</a>吧</p>
+                        </body>
+                        </html>
+
+                        '''
+            return render_template('select_friend.html', frr = ret)
+
     except Exception as e:
         #logging.error(str(e))
         print str(e)
-        ret = str(e)
         traceback.print_exc(file=sys.stdout)
-        ret += "<hr/>"
-        ret += "<p>%s</p>"%("用户名，密码错误，请再试一次")
+        ret = "<p>%s</p>"%("用户名，密码或者验证码错误!请再试一次")
+        ret += '<script> console.log("%s") </script>' % str(e)
     return ret
 
 @app.route('/dianzan_verify', methods = ['POST'])
@@ -82,7 +95,7 @@ def _dianzan_verify():
     except Exception as e:
         #logging.error(str(e) + str(data))
         print str(e) + str(data)
-        ret = str(e)
-        ret += "<hr/>"
-        ret += "<p>%s</p>"%("用户名，密码或者验证码错误!请再试一次")
+        traceback.print_exc(file=sys.stdout)
+        ret = "<p>%s</p>"%("用户名，密码或者验证码错误!请再试一次")
+        ret += '<script> console.log("%s") </script>' % str(e)
     return ret

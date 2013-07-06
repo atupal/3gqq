@@ -23,8 +23,13 @@ app.DEBUG = True
 def before_request():
     pass
 
+from application.apps.db_methods import init_db
+db = init_db()
+
 @app.teardown_request
 def teardown_request(exception):
+    try:db.close()
+    except:pass
     print exception
 
 from application.views import index
