@@ -83,6 +83,40 @@
 </script>
 <!--p>web版的点赞次数和间隔还没实现,等考试完再弄吧</p>
 <strong>很多人问我有没有记录密码,,,没有,没有记录任何东西,你可以看下源代码(右上角)</strong-->
+
+<hr />
+<form action="/feedback" method="POST">
+    <div>
+        留下你的评论吧 !
+    </div>
+    <br />
+    <label>nickname(必):</label>
+    <input type="text", name="nickname" />
+    <br />
+    <label>contact(选):</label>
+    <input type="text", name="contact" />
+    <br />
+    <label>comment(必):</label>
+    <input type="text", name="comment" />
+    <br />
+    <input type="submit" value="提交">
+</form>
+
+<hr />
+
+{%  for c in comments %}
+<div>
+    <label> nickname: </label>
+    <p> c[0]  </p>
+    <label> contact: </label>
+    <p> c[1]  </p>
+    <label> comment: </label>
+    <p> c[2]  </p>
+</div>
+</hr>
+{% endfor %}
+
+
 <div class="github-fork-ribbon-wrapper right">
     <div class="github-fork-ribbon">
         <a href="https://github.com/atupal/3gqq/blob/master/dianzan/dianzan_py-dom-xpath.py">Fork me on GitHub</a>

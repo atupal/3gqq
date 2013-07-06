@@ -19,7 +19,14 @@ import traceback
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    db = init_db()
+    cursor = db.cursor()
+    cursor.execute('''select * from feedback''')
+    ret = cursor.fetchall()
+    try:ret_list = [ [ _[1] , _[2], _[3] ] for _ in ret ]
+    except:ret_list = [ ['error', 'error', 'error'] ]
+
+    return render_template('index.html', comments = ret_list)
 
 #import logging
 @app.route('/dianzan', methods = ['POST'])
@@ -99,3 +106,28 @@ def _dianzan_verify():
         ret = "<p>%s</p>"%("用户名，密码或者验证码错误!请再试一次")
         ret += '<script> console.log("%s") </script>' % str(e)
     return ret
+
+
+@app.route('/feedback', methods = ['POST'])
+def feedback():
+    db = init_db()
+    nickname = request.form.get('nickname', '这个人很懒什么都没留下')
+    contact = request.form.get('contact', '这个人很懒什么都没留下')
+    comment = request.form.get('comment', '妈蛋, 这个人什么都没写')
+
+    import MySQLdb
+    nickname = MySQLdb.escape_string(nickname)
+    contact = MySQLdb.escape_string(contact)
+    comment = MySQLdb.escape_string(comment)
+    sql = r'''
+                insert feedback (nickname, cnotact, comment) values ("%s", "%s", "%s");
+        ''' % (nickname, contact, comment)
+    cursor = db.cursor()
+    cursor.execute(sql)
+    db.commit()
+    db.close()
+    return r'''
+        <html>
+            <p> 评论成功, <a href="/">点击</a>返回  </p>
+        </html>
+    '''

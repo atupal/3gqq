@@ -46,9 +46,10 @@ def init_db():
     db = MySQLdb.connect(host = MYSQL_HOST, port = int(MYSQL_PORT), db = MYSQL_DB , user = MYSQL_USER, passwd = MYSQL_PASS )
     return db
 
-def create_table(db):
+def create_table(db, sql = None):
     cursor = db.cursor()
-    cursor.execute(r'''
+    if not sql:
+        sql = r'''
     create table task
         (
                 id int unsigned not null auto_increment primary key,
@@ -61,7 +62,9 @@ def create_table(db):
                 frr text(5000) default "",
                 message char(100)
         );
-            ''')
+            '''
+    cursor.execute(sql)
+    db.commit()
     del cursor
 
 def add_task(db, uid, url, ttl = 10, inc = 10, pos = "", neg = "", frr = ""):
