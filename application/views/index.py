@@ -111,9 +111,13 @@ def _dianzan_verify():
 @app.route('/feedback', methods = ['POST'])
 def feedback():
     db = init_db()
-    nickname = request.form.get('nickname', '这个人很懒什么都没留下')
+    nickname = request.form.get('nickname', '这个人很懒什么都没留下')  # T_T  这样不管用,,当为空时得到的就是空字符串,,,我这个傻逼
     contact = request.form.get('contact', '这个人很懒什么都没留下')
     comment = request.form.get('comment', '妈蛋, 这个人什么都没写')
+
+    if not nickname: nickname = '这个人很懒什么都没留下'
+    if not contact: contact = '这个人很懒什么都没留下'
+    if not comment: comment = '妈蛋,这个人太懒了吧! 什么都没写...'
 
     import MySQLdb
     nickname = MySQLdb.escape_string(nickname)

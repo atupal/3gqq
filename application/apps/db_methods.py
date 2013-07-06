@@ -104,10 +104,21 @@ class MysqlTest(unittest.TestCase):
     def tearDown(self):
         self.db.close()
 
-    def _test_add(self):
+    def test_add(self):
         cursor = self.db.cursor()
-        cursor.execute('select * from task')
-        printf( cursor.fetchall() )
+        sql = r'''
+                create table feedback
+                    (
+                            id int unsigned not null auto_increment primary key,
+                            nickname char(250),
+                            contact char(250),
+                            comment text,
+                            message char(100)
+                );
+            '''
+        cursor.execute(sql)
+        self.db.commit()
+        self.db.close()
 
 
 if __name__ == "__main__":
