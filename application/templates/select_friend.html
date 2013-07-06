@@ -6,10 +6,10 @@
 
 <form action="/select_friend", method="POST">
     <label>全选</label><input type="checkbox"  onclick="all_select(this)" /> 
-    <label>勾选你要赞的好友 (如果人数不对,请刷新, 而且以后用户再次登录时将使用相同的设置)</label>
+    <label>勾选你要赞的好友 (如果人数不对或者信息不全(网络问题),请<a href="/">重试</a>, 而且以后用户再次登录时将使用相同的设置)</label>
     <hr />
     {% for i in frr %} 
-    <input type="checkbox" name="frr"> 
+    <input type="checkbox" name="frr" class="frr"> 
     <label>{{ i }} ( {{ frr[i] }} ) </label>  <br />
     {% endfor %}
 
