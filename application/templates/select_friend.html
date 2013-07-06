@@ -5,11 +5,14 @@
 
 
 <form action="/select_friend", method="POST">
-    <label>全选</label><input type="checkbox"  onclick="all_select(this)" /> 
+    <label >全选</label>
+    <input type="checkbox"  onclick="all_select(this)" id="label"  /> 
     <label>勾选你要赞的好友 (如果人数不对或者信息不全(网络问题),请<a href="/">重试</a>, 而且以后用户再次登录时将使用相同的设置)</label>
+    <br />
+    <input type="submit"  value="confirm" />
     <hr />
     {% for i in frr %} 
-    <input type="checkbox" name="frr" class="frr"> 
+    <input type="checkbox" name="{{ i }}" class="frr"> 
     <label>{{ i }} ( {{ frr[i] }} ) </label>  <br />
     {% endfor %}
 
@@ -17,7 +20,18 @@
 
 <script>
 var all_select = function(checkbox) {
-    alert('hhehe');
+    ele = document.getElementById('label');
+    s = document.getElementsByClassName('frr');
+    if (!ele.checked) {
+        for (var i = 0; i < s.length; ++ i) {
+            s[i].checked = false;
+        }
+    }
+    else {
+        for (var i = 0; i < s.length; ++ i) {
+            s[i].checked = true;
+        }
+    }
 }
 </script>
 

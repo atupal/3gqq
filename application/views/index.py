@@ -13,6 +13,7 @@ from application.apps.db_methods import add_task
 from application.apps.db_methods import init_db
 import logging
 import traceback
+from pprint import pprint as printf
 
 #from application import db
 
@@ -107,6 +108,11 @@ def _dianzan_verify():
         ret += '<script> console.log("%s") </script>' % str(e)
     return ret
 
+
+@app.route('/select_friend', methods = ['POST'])
+def select_friend():
+    printf(request.form.keys())
+    return 'yes'
 
 @app.route('/feedback', methods = ['POST'])
 def feedback():

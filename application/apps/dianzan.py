@@ -314,8 +314,8 @@ class Dianzan:
             content = self.session.get(feed_url).content
 
             urls = self._parse(None, '//*/@href', content = content)
-            import json
-            return json.dumps( self.get_friend() )
+            #import json
+            #return json.dumps( self.get_friend() )
 
 
             for url in urls:
