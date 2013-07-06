@@ -9,7 +9,8 @@
     <label>勾选你要赞的好友 (如果人数不对,请刷新, 而且以后用户再次登录时将使用相同的设置)</label>
     <hr />
     {% for i in frr %} 
-    <label>{{ i }} ( {{frr[i]}} ) </label> <input type="checkbox" name="frr"> <br />
+    <input type="checkbox" name="frr"> 
+    <label>{{ i }} ( {{ frr[i] }} ) </label>  <br />
     {% endfor %}
 
 </form>
