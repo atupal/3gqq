@@ -28,3 +28,4 @@ def teardown_request(exception):
     print exception
 
 from application.views import index
+import application.views

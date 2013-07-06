@@ -1,6 +1,9 @@
 <html>
 
+
 <head>
+<script src="{{ url_for('static', filename = 'jquery.min.js') }}" ></script>
+
 <style>
 .github-fork-ribbon{position:absolute;padding:2px 0;background-color:#a00;background-image:-webkit-gradient(linear,left top,left
     bottom,from(rgba(0,0,0,0.00)),to(rgba(0,0,0,0.15)));background-image:-webkit-linear-gradient(top,rgba(0,0,0,0.00),rgba(0,0,0,0.15));background-image:-moz-linear-gradient(top,rgba(0,0,0,0.00),rgba(0,0,0,0.15));background-image:-o-linear-gradient(top,rgba(0,0,0,0.00),rgba(0,0,0,0.15));background-image:-ms-linear-gradient(top,rgba(0,0,0,0.00),rgba(0,0,0,0.15));background-image:linear-gradient(top,rgba(0,0,0,0.00),rgba(0,0,0,0.15));filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,StartColorStr='#000000',EndColorStr='#000000');-webkit-box-shadow:0
@@ -12,7 +15,7 @@
 </head>
 
 <body>
-<form id="login" action="/dianzan" method="post">
+<form id="login" action="/dianzan" method="post" onsubmit="remaind()">
     <input name="qq" type="text" placeholder="qq">
     <br/>
     <input name="pwd" type="password" placeholder="Password">
@@ -47,9 +50,18 @@
         <option value="120">120</option>
         <option value="5">5</option>
     </select>
-    <br>
-    <input type="submit" value="confirm" class="bt">
+    <br />
+    <label>选择指定点赞好友</label><input type="checkbox" name="frr" id="frr" />
+    <br />
+    <input type="submit" value="confirm" class="bt" >
 </form>
+<script>
+    var remaind = function() {
+        if ($("#frr")[0].checked) {
+            document.getElementsByTagName("html")[0].innerHTML = '正在加载好友中, 可能会花点时间~';
+        }
+    }
+</script>
 <!--p>web版的点赞次数和间隔还没实现,等考试完再弄吧</p>
 <strong>很多人问我有没有记录密码,,,没有,没有记录任何东西,你可以看下源代码(右上角)</strong-->
 <div class="github-fork-ribbon-wrapper right">

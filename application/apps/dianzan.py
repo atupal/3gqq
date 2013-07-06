@@ -20,13 +20,7 @@
 #
 #  site: http://atupal.org
 
-import requests
-#import libxml2 as xparse
-import sys
-#import re
-reload(sys)
-sys.setdefaultencoding('utf-8')
-#import copy
+import requests #import libxml2 as xparse import sys #import re reload(sys) sys.setdefaultencoding('utf-8') #import copy
 
 from xml.dom.minidom import parseString
 import xpath
@@ -35,86 +29,32 @@ import lxml.html
 import urllib
 import logging
 import unittest
-import MySQLdb
 
 try:
-    import sae.const
-
-    '''
-    sae.const.MYSQL_DB      # 数据库名
-    sae.const.MYSQL_USER    # 用户名
-    sae.const.MYSQL_PASS    # 密码
-    sae.const.MYSQL_HOST    # 主库域名（可读写）
-    sae.const.MYSQL_PORT    # 端口，类型为，请根据框架要求自行转换为int
-    sae.const.MYSQL_HOST_S  # 从库域名（只读）
-    '''
-
-    MYSQL_DB     = sae.const.MYSQL_DB
-    MYSQL_USER   = sae.const.MYSQL_USER
-    MYSQL_PASS   = sae.const.MYSQL_PASS
-    MYSQL_HOST   = sae.const.MYSQL_HOST
-    MYSQL_PORT   = sae.const.MYSQL_PORT
-    MYSQL_HOST_S = sae.const.MYSQL_HOST_S
-
+    from application.apps.db_methods import init_db
+    from application.apps.db_methods import add_task
 except:
-    import ConfigParser
-    config = ConfigParser.RawConfigParser()
-    with open('/home/atupal/src/github/3gqq/dianzan/server-sae/env.cfg','r') as fi:
-        config.readfp(fi)
-        MYSQL_DB     = config.get('mysql', 'MYSQL_DB')
-        MYSQL_USER   = config.get('mysql', 'MYSQL_USER')
-        MYSQL_PASS   = config.get('mysql', 'MYSQL_PASS')
-        MYSQL_HOST   = config.get('mysql', 'MYSQL_HOST')
-        MYSQL_PORT   = config.get('mysql', 'MYSQL_PORT')
-        MYSQL_HOST_S = config.get('mysql', 'MYSQL_HOST_S')
+    from db_methods import init_db
+    from db_methods import add_task
 
-
-db = None
-
-def init_db():
-    global db
-    db = MySQLdb.connect(host = MYSQL_HOST, port = int(MYSQL_PORT), db = MYSQL_DB , user = MYSQL_USER, passwd = MYSQL_PASS )
-
-def create_table():
-    cursor = db.cursor()
-    cursor.execute(r'''
-    create table task
-        (
-                id int unsigned not null auto_increment primary key,
-                uid char(50),
-                ttl int default 0,
-                url char(250),
-                inc int default 10,
-                pos text(1000) default "",
-                neg text(1000) default "",
-                frr text(5000) default "",
-                message char(100)
-        );
-            ''')
-
-
-
-def add_task(uid, url, ttl = 10, inc = 10, pos = "", neg = "", frr = ""):
-    cursor = db.cursor()
-    cursor.execute(r'''
-        insert task (uid, ttl, url, inc, pos, neg, frr) values (%d, %d, "%s", %d, "%s", "%s", "%s");
-            ''' % (uid, ttl, url, inc, pos, neg, frr) )
-    db.commit()
 
 __metaclass__ = type
 class Dianzan:
     '''
         qq         : qq帐号, 邮箱格式数字格式均可
         pwd        : 密码, 测试帐号和密码是保存在当前目录下的user文集中
-        feq        : 点赞频率
+        feq        : 点赞次数
         inc        : 点赞的时间增量(即间隔)
         cnt        : 点赞的页数
         session    : 保存了用户cookie的session对象(requests.Session)
         repeat_set : 由于空间存在一些无法点赞或者没有权限点赞的content, 所以加个hash表判断下
         url        : 用户的主feed页面(带书签)
+        frr        : 只点赞某些用户, 如果为空就全部点赞
+        pos        : 出现了这些词语就点赞, 如果和neg重复了, 优先点赞
+        neg        : 出现了这些词语就不点赞
     '''
 
-    def __init__(self, qq = None, pwd = None, feq = 1, inc = 10, cnt = 1):
+    def __init__(self, qq = None, pwd = None, feq = 1, inc = 10, cnt = 1, url = None, frr = '', pos = '', neg = ''):
         self.qq = 'atupal@foxmail.com' if not qq else qq
         self.pwd = 'xxxxx' if not pwd else pwd
         self.feq = feq
@@ -338,6 +278,7 @@ class Dianzan:
                             friend[url[begin:end]] = tmp.text
 
                 try:all_friend_url = self.lxml_parse(url = None, content = content, _xpath = '//a[text()="%s"]' % u'下页' )[0].values()[0]
+                except IndexError:all_friend_url = []
                 except Exception as e:logging.error("next_page:" + str(e));all_friend_url=[]
 
             return friend
@@ -345,10 +286,9 @@ class Dianzan:
         except Exception as e:
             return {}
             logging.error('get_griend' + str(e))
-            pass
 
 
-    def dianzan(self, cnt = 5, op = '1'):
+    def dianzan(self, cnt = 5, op = '1', url_from_db = None):
         '''
         下面这中方法返回的地址是转义了的。。
         '''
@@ -359,7 +299,8 @@ class Dianzan:
         if self.verify:
             return self.verify
 
-        feed_url = self.url
+        if not url_from_db:feed_url = self.url
+        else: feed_url = url_from_db
         #url = self._parse(feed_url, '/wml/card/@ontimer') #不知道为什么换了一个qq号的时候这里会多加一个跳转
         #if url:
         #    feed_url = url[0].content
@@ -411,6 +352,17 @@ class Dianzan_verify(Dianzan):
         self.url = self._verify(data = data, headers = headers)
         self.verify = None
 
+
+class Dianzan_from_url(Dianzan):
+    def __init__(self):
+        '''
+            覆盖掉父类的构造方法, 防止执行父类构造方法中的_login函数
+        '''
+        self.verify = None
+        self.session = requests
+        pass
+
+
 class DianzanTest(unittest.TestCase):
     def setUp(self):
         pass
@@ -418,9 +370,9 @@ class DianzanTest(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def _test_db(self):
-        init_db()
-        add_task(uid = 1, url = 'http://test.com')
+    def test_db(self):
+        db = init_db()
+        add_task(db, uid = 'ts', url = 'ts')
 
     def _test_dianzan(self):
         #qq = raw_input('qq:')

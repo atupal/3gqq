@@ -9,6 +9,12 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
+from application.apps.db_methods import init_db
+from application.apps.db_methods import add_task
+import logging
+import traceback
+
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -19,13 +25,34 @@ def _dianzan():
     if request.method != 'POST':
         return 'methods not allowed!'
     try:
-        qq = request.form.get('qq')
-        pwd = request.form.get('pwd')
-        cnt = request.form.get('cnt')
-        feq = request.form.get('feq')
-        inc = request.form.get('inc')
-        D = dianzan.Dianzan(qq = qq, pwd = pwd, cnt = int(cnt), feq = int(feq), inc = int(inc))
+        qq = request.form.get('qq', '')
+        pwd = request.form.get('pwd', '')
+        cnt = request.form.get('cnt', '1')
+        feq = request.form.get('feq', '10')  # 点赞次数
+        inc = request.form.get('inc', '10')
+        frr = request.form.get('frr', '')
+        pos = request.form.get('pos', '')
+        neg = request.form.get('neg', '')
+
+        try:D = dianzan.Dianzan(qq = qq, pwd = pwd, cnt = int(cnt), feq = int(feq), inc = int(inc))
+        except Exception as e: print e
+
+        if str(frr) == "on":
+            return 'coding , please wait'
+
         ret = D.dianzan(cnt = int(cnt))
+
+        try:
+            feq = int(feq)
+            inc = int(inc)
+
+            if (feq * inc - inc) > 0:
+                db = init_db()
+                add_task(db, uid = D.qq, url = D.url, ttl = feq * inc - inc, inc = inc, pos = pos, neg = neg)
+        except Exception as e:
+            logging.error('/dianzan:' + str(e))
+            traceback.print_exc(file=sys.stdout)
+
     except Exception as e:
         #logging.error(str(e))
         print str(e)
