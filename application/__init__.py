@@ -31,3 +31,4 @@ def teardown_request(exception):
     except:pass
 
 from application.views import index
+from application.control import qq

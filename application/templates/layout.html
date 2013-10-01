@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    {% block head%}
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="SNS点赞机">
@@ -9,8 +10,10 @@
     <link rel="icon" href="/favicon.ico" mce_href="/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="/favicon.ico" mce_href="/favicon.ico" type="image/x-icon">
 
-    <title>SNS点赞机(by atupal)</title>
+    {% endblock %}
+    <title>{% block title %}SNS点赞机(by atupal){% endblock %}</title>
 
+    {% block css %}
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.css" rel="stylesheet">
 
@@ -18,17 +21,18 @@
     <link href="css/simple-sidebar.css" rel="stylesheet">
     <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet">
 
+    <link href="css/github.css" rel="stylesheet">
+    {% endblock %}
   </head>
 
   <body>
-  
     <div id="wrapper">
-      
+    {% block body %}
       <!-- Sidebar -->
       <div id="sidebar-wrapper">
         <ul class="sidebar-nav">
           <li class="sidebar-brand"><a href="#">SNS点赞机(by atupal)</a></li>
-          <li><a href="#">qq空间定赞机</a></li>
+          <li><a href="{{ url_for('dianzan_qq') }}">qq空间定赞机</a></li>
           <li><a href="#">人人定赞机</a></li>
           <li><a href="#">微博定赞机</a></li>
           <li><a href="#">定制定赞机</a></li>
@@ -38,8 +42,10 @@
           <li><a href="#">About</a></li>
         </ul>
       </div>
+    {% endblock %}
           
       <!-- Page content -->
+      {% block page %}
       <div id="page-content-wrapper">
         <div class="content-header">
           <h1>
@@ -51,9 +57,11 @@
         <div class="page-content inset">
         </div>
       </div>
+      {% endblock %}
       
     </div>
-	
+
+    {% block js %}
     <!-- Bootstrap core JavaScript -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="js/jquery.js"></script>
@@ -65,5 +73,16 @@
         $("#wrapper").toggleClass("active");
     });
     </script>
+    <script>
+    {% endblock %}
+    </script>
+
+    {% block github %}
+      <div class="github-fork-ribbon-wrapper right">
+          <div class="github-fork-ribbon">
+              <a href="https://github.com/atupal/3gqq/blob/master/dianzan/dianzan_py-dom-xpath.py">Fork me on GitHub</a>
+          </div>
+      </div>
+    {% endblock %}
   </body>
 </html>
