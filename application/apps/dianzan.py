@@ -64,6 +64,8 @@ class Dianzan:
         self.feq = feq
         self.inc = inc
         self.cnt = cnt
+        self.pos = pos
+        self.neg = neg
         self.session = requests.Session()
         self._login()
         self.repeat_set = set()
@@ -170,6 +172,8 @@ class Dianzan:
                     form += '<input type="hidden" name="%s" value="%s"></input>'%(i, data[i])
 
                 form += '<input type="hidden" name="url" value="%s"></input>'%url #带上url，下次浏览器post接收
+                form += '<input type="hidden" name="pos" value="%s"></input>'%self.pos #带上url，下次浏览器post接收
+                form += '<input type="hidden" name="neg" value="%s"></input>'%self.neg #带上url，下次浏览器post接收
                 form += '<input type="text" name="verify"></input>'
                 form += '<input type="submit" value="confirm"></input>'
                 form += '</form>'
@@ -205,6 +209,8 @@ class Dianzan:
 
         if not url:
             url = data.pop('url')
+            self.pos = data.pop('pos')
+            self.neg = data.pop('neg')
             self.url = url  # Dianzan_verify子类没有登录, 所以手动添加url 属性
         res = self.session.post(url, data = data, headers = headers, allow_redirects = False)
         print '1' + str(res.content)
@@ -237,7 +243,7 @@ class Dianzan:
             ret: 生成器, 元素为一个三元tuple: ( url, content, uid )
         '''
         xparser = lxml.html.fromstring(content)
-        filt = lambda x:x.values() and x.values()[0].find('like_action') != -1 and x.values()[0][-1] == '0'
+        filt = lambda x:x.values() and x.values()[0].find('like_action') != -1 and x.values()[0][-1] == '1'
         urls = filter(filt, xparser.xpath('//a') )
 
 
@@ -316,16 +322,30 @@ class Dianzan:
 
         #self.url = feed_url
 
+        pos = [ _.strip() for _ in self.pos.split('#') ]
+        neg = [ _.strip() for _ in self.neg.split('#') ]
+        print pos, neg
+        is_filter = self.pos or self.neg
         for i in xrange(cnt):
             print "feed_url:" + feed_url
             content = self.session.get(feed_url).content
+
+            if is_filter:
+              for zan_url, zan_content, zan_user in self.get_zan_datail(content):
+                print zan_content
+                if any( [ (_ and _ in zan_content.decode('utf-8')) for _ in pos] ) and not any( [ (_ and _ in zan_content.decode('utf-8')) for _ in neg ] ):
+                #if zan_content.decode('utf-8') in pos and zan_content not in neg:
+                  print zan_content, pos, neg
+                  self.session.get(zan_url)
+                  print '赞成功'
 
             urls = self._parse(None, '//*/@href', content = content)
             #import json
             #return json.dumps( self.get_friend() )
 
 
-            for url in urls:
+            if not is_filter:
+              for url in urls:
                 if url.content.find('like_action') != -1 and url.content[-1] == op:
                     if self.repeat_set.issuperset({url.content}):
                         continue

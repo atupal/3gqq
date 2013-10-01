@@ -14,6 +14,7 @@ from application.apps.db_methods import init_db
 import logging
 import traceback
 from pprint import pprint as printf
+import urllib
 
 @app.route('/dianzan', methods = ['POST'])
 def _dianzan():
@@ -27,7 +28,7 @@ def _dianzan():
         pos = request.form.get('pos', '')
         neg = request.form.get('neg', '')
 
-        try:D = dianzan.Dianzan(qq = qq, pwd = pwd, cnt = int(cnt), feq = int(feq), inc = int(inc))
+        try:D = dianzan.Dianzan(qq = qq, pwd = pwd, cnt = int(cnt), feq = int(feq), inc = int(inc), pos = pos, neg = neg)
         except Exception as e: print e; traceback.print_exc(file = sys.stdout)
 
 
