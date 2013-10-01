@@ -35,4 +35,3 @@ nosetests.xml
 .project
 .pydevproject
 index.wsgi
-index.*
