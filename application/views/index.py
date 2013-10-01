@@ -18,7 +18,7 @@ from pprint import pprint as printf
 #from application import db
 
 
-@app.route('/')
+@app.route('/origin')
 def index():
     db = init_db()
     cursor = db.cursor()
