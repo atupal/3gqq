@@ -15,3 +15,11 @@
   height: 0px;
   display: none;
 }
+
+.em:hover {
+  background: #000;
+}
+
+.em-wrap {
+  display: inline;
+}

@@ -75,4 +75,49 @@ $(function(){
   $(".verify_img").click(function(){
     this.src = this.src;
   });
+
+  $("#pos-em-btn").click(function(){
+    if($("#pos-em-body")[0].innerHTML.trim() == "") {
+      for (var i = 100; i < 205; ++ i) {
+        $("#pos-em-body").append('\
+          <div class="em-wrap">\
+          <img src="http://cnc.qzonestyle.gtimg.cn/qzone/em/e' + i
+          +'.gif" \
+            class="em-pos em" data-ind="'+i+' " \
+          /> </div>');
+      }
+
+      $(".em-pos").click(function(){
+        if ($("#pos")[0].value != "") {
+          $("#pos")[0].value += "#" + "[em]e"+ this.getAttribute("data-ind") +"[/em]";
+        } else {
+          $("#pos")[0].value += "[em]e"+ this.getAttribute("data-ind") +"[/em]";
+        }
+      });
+
+    }
+  });
+
+  $("#neg-em-btn").click(function(){
+    if($("#neg-em-body")[0].innerHTML.trim() == "") {
+      for (var i = 100; i < 205; ++ i) {
+        $("#neg-em-body").append('\
+          <div class="em-wrap">\
+          <img src="http://cnc.qzonestyle.gtimg.cn/qzone/em/e' + i
+          +'.gif" \
+            class="em-neg em" data-ind="'+i+'" \
+          /> </div>');
+      }
+
+      $(".em-neg").click(function(){
+        if ($("#neg")[0].value != "") {
+          $("#neg")[0].value += "#" + "[em]e"+ this.getAttribute("data-ind") +"[/em]";
+        } else {
+          $("#neg")[0].value += "[em]e"+ this.getAttribute("data-ind") +"[/em]";
+        }
+      });
+
+    }
+  });
+
 });

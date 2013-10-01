@@ -70,11 +70,54 @@ QQ空间点赞机
 
   <div class="form-group">
     <label for="pos">出现以下词语就点赞(词条间请用#分开,自动忽略头尾空格)</label>
+    <!-- Button trigger modal -->
+    <a data-toggle="modal" href="#pos-em" id="pos-em-btn" class="btn">表情</a>
+
+    <!-- Modal -->
+    <div class="modal " id="pos-em" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">点击选择表情</h4>
+          </div>
+          <div class="modal-body">
+            <div id="pos-em-body">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
     <input type="text" name="pos" id="pos" class="form-control"/>
   </div>
 
   <div class="form-group">
     <label for="neg">出现以下词语(同上)就不点赞(优先级低于上面的)</label>
+    <!-- Button trigger modal -->
+    <a data-toggle="modal" href="#neg-em" id="neg-em-btn" class="btn">表情</a>
+
+    <!-- Modal -->
+    <div class="modal " id="neg-em" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">点击选择表情</h4>
+          </div>
+          <div class="modal-body">
+            <div id="neg-em-body">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
     <input type="text" id="neg" name="neg" class="form-control"/>
   </div>
 
@@ -87,7 +130,7 @@ QQ空间点赞机
 
   <div class="checkbox">
     <label>
-      <input type="checkbox"> 浏览器记住登陆信息(不会保存密码)
+      <input type="checkbox"> 记住登陆信息(保存书签(非密码)在服务器上，无需再次登陆)
     </label>
   </div>
 
