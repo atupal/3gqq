@@ -1,3 +1,7 @@
 .required{
   color: red;
 }
+
+.hidden{
+  display: none;
+}

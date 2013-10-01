@@ -17,8 +17,6 @@ from pprint import pprint as printf
 
 @app.route('/dianzan', methods = ['POST'])
 def _dianzan():
-    if request.method != 'POST':
-        return 'methods not allowed!'
     try:
         qq = request.form.get('qq', '')
         pwd = request.form.get('pwd', '')

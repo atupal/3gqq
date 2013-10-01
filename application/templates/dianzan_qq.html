@@ -23,12 +23,14 @@ QQ空间点赞机
 {% block page %}
 <form role="form">
   <div class="form-group">
-    <label for="qq">QQ/Email address<strong class="required"> *</strong></label>
+    <label>QQ/Email address<strong class="required"> *</strong></label>
+    <span class="required" for="qq"></span>
     <input type="text" name="qq" class="form-control" placeholder="Enter QQ/email" id="qq">
   </div>
   <div class="form-group">
-    <label for="password">Password<strong class="required"> *</strong></label>
-    <input type="password" name="password" class="form-control" placeholder="Password" id="password">
+    <label>Password<strong class="required"> *</strong></label>
+    <span class="required" for="password"></span>
+    <input type="password" name="pwd" class="form-control" placeholder="Password" id="password">
   </div>
   <div class="form-group">
     <label for="cnt">点赞页数</label>
@@ -41,7 +43,7 @@ QQ空间点赞机
     </select>
   </div>
   <div class="form-group">
-    <label for="feq">点赞次数</label>
+    <label for="feq">点赞次数<span class="required"> (仅对登陆用户有效)</span></label>
     <select name="feq" class="form-control" id="feq">
         <option value="1">1</option>
         <option value="5">5</option>
@@ -54,7 +56,7 @@ QQ空间点赞机
     </select>
   </div>
   <div class="form-group">
-    <label for="inc">点赞间隔(min)</label>
+    <label for="inc">点赞间隔(min)<span class="required"> (仅对登陆用户有效)</span></label>
     <select name="inc" class="form-control" id="inc">
         <option value="10">10</option>
         <option value="20">30</option>
@@ -70,12 +72,12 @@ QQ空间点赞机
   </div>
 
   <div class="form-group">
-    <label for="pos">出现以下词语就点赞(词条间请用|分开,词条会strip空格)</label>
+    <label for="pos">出现以下词语就点赞(词条间请用#分开,自动忽略头尾空格)</label>
     <input type="text" name="pos" id="pos" class="form-control"/>
   </div>
 
   <div class="form-group">
-    <label for="neg">出现以下词语就不点赞(优先级低于上面的)</label>
+    <label for="neg">出现以下词语(同上)就不点赞(优先级低于上面的)</label>
     <input type="text" id="neg" name="neg" class="form-control"/>
   </div>
 
@@ -90,6 +92,7 @@ QQ空间点赞机
 
 {% block js %}
 {{ super() }}
+<script type="text/javascript" src="{{ url_for('static', filename='js/dianzan_qq.js') }}"></script>
 {% endblock %}
 
 {% block github %}
