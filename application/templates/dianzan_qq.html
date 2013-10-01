@@ -23,18 +23,67 @@ QQ空间点赞机
 {% block page %}
 <form role="form">
   <div class="form-group">
-    <label for="exampleInputEmail1">QQ/Email address</label>
-    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter QQ/email">
+    <label for="qq">QQ/Email address<strong class="required"> *</strong></label>
+    <input type="text" name="qq" class="form-control" placeholder="Enter QQ/email" id="qq">
   </div>
   <div class="form-group">
-    <label for="exampleInputPassword1">Password</label>
-    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+    <label for="password">Password<strong class="required"> *</strong></label>
+    <input type="password" name="password" class="form-control" placeholder="Password" id="password">
   </div>
-  <div class="checkbox">
+  <div class="form-group">
+    <label for="cnt">点赞页数</label>
+    <select name="cnt" class="form-control" id="cnt">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="feq">点赞次数</label>
+    <select name="feq" class="form-control" id="feq">
+        <option value="1">1</option>
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="20">20</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+        <option value="100">200</option>
+        <option value="100">500</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="inc">点赞间隔(min)</label>
+    <select name="inc" class="form-control" id="inc">
+        <option value="10">10</option>
+        <option value="20">30</option>
+        <option value="60">60</option>
+        <option value="120">120</option>
+        <option value="5">5</option>
+    </select>
+  <div/>
+
+  <div class="form-group">
+    <label></label>
+    <button class="form-control" type="button">选择点赞的指定好友</button>
+  </div>
+
+  <div class="form-group">
+    <label for="pos">出现以下词语就点赞(词条间请用|分开,词条会strip空格)</label>
+    <input type="text" name="pos" id="pos" class="form-control"/>
+  </div>
+
+  <div class="form-group">
+    <label for="neg">出现以下词语就不点赞(优先级低于上面的)</label>
+    <input type="text" id="neg" name="neg" class="form-control"/>
+  </div>
+
+  <!--div class="checkbox">
     <label>
       <input type="checkbox"> Check me out
     </label>
-  </div>
+  </div-->
   <button type="submit" class="btn btn-default">Submit</button>
 </form>
 {% endblock %}
