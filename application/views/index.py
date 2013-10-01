@@ -17,9 +17,12 @@ from pprint import pprint as printf
 
 #from application import db
 
+@app.route('/')
+def index():
+  return '正在重构代码，请移步http://3gqq67.sinaapp.com/origin'
 
 @app.route('/origin')
-def index():
+def index_origin():
     db = init_db()
     cursor = db.cursor()
     cursor.execute('''select * from feedback order by id DESC''')
