@@ -6,6 +6,9 @@
 
     author: atupal
 '''
+import os
+try:from index import ROOT_DIR
+except:ROOT_DIR = "/home/atupal/src/github/3gqq/"
 
 try:
     import sae.const
@@ -29,7 +32,7 @@ try:
 except:
     import ConfigParser
     config = ConfigParser.RawConfigParser()
-    with open('/home/atupal/src/github/3gqq/dianzan/server-sae/env.cfg','r') as fi:
+    with open(os.path.join(ROOT_DIR, 'env.cfg') ,'r') as fi:
         config.readfp(fi)
         MYSQL_DB     = config.get('mysql', 'MYSQL_DB')
         MYSQL_USER   = config.get('mysql', 'MYSQL_USER')
@@ -116,9 +119,13 @@ class MysqlTest(unittest.TestCase):
                             message char(100)
                 );
             '''
+        sql = r'''
+        select * from feedback;
+        '''
         cursor.execute(sql)
         self.db.commit()
-        self.db.close()
+        print cursor.fetchall()
+        #self.db.close()
 
 
 if __name__ == "__main__":

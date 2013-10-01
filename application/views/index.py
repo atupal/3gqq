@@ -19,7 +19,7 @@ from pprint import pprint as printf
 
 @app.route('/')
 def index():
-  return '正在重构代码，请移步http://3gqq67.sinaapp.com/origin'
+  return render_template('layout.html')
 
 @app.route('/origin')
 def index_origin():

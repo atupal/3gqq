@@ -1,8 +1,7 @@
 
 from flask import Flask
 
-app = Flask(__name__)
-app.DEBUG = True
+app = Flask(__name__, static_url_path = "")
 
 #import ConfigParser
 #import os
@@ -30,6 +29,5 @@ db = init_db()
 def teardown_request(exception):
     try:db.close()
     except:pass
-    print exception
 
 from application.views import index
