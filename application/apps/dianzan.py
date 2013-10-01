@@ -20,7 +20,11 @@
 #
 #  site: http://atupal.org
 
-import requests #import libxml2 as xparse import sys #import re reload(sys) sys.setdefaultencoding('utf-8') #import copy
+import requests 
+#import libxml2 as xparse import sys 
+#import re reload(sys) 
+#sys.setdefaultencoding('utf-8')
+#import copy
 
 from xml.dom.minidom import parseString
 import xpath
@@ -155,7 +159,8 @@ class Dianzan:
             verify_img.show()
             url = self._parse(None, '//*/@href', content = res.content)[1].content #post地址
             import os
-            if os.environ.get('HOME') == '/home/atupal':
+            #if os.environ.get('HOME') == '/home/atupal':
+            if False:
                 data['verify'] = raw_input("verify:")
                 url = self._verify(data = data, headers = headers, url = url)
 
@@ -222,6 +227,8 @@ class Dianzan:
         if url_tmp:
             url = url_tmp
 
+        self.url = url
+        print 'verify_after_url:', self.url
         return self.url
 
     def get_zan_datail(self, content):
@@ -348,6 +355,7 @@ class Dianzan_verify(Dianzan):
             覆盖掉父类的构造方法, 防止执行父类构造方法中的_login函数
         '''
         self.session = requests.Session()
+        self.repeat_set = set()
 
     def verify(self, data, headers):
         print data

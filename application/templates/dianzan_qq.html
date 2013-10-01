@@ -13,10 +13,7 @@
 {% endblock %}
 
 {% block body %}
-{{ super() }}
-{% endblock %}
-
-{% block header %}
+{{ super() }} {% endblock %} {% block header %}
 QQ空间点赞机
 {% endblock %}
 
@@ -81,13 +78,22 @@ QQ空间点赞机
     <input type="text" id="neg" name="neg" class="form-control"/>
   </div>
 
+  <div class="form-group hidden" id="verify_div">
+    <label>请输入验证码，有时即使您已经登陆为了安全我们也会让您输入验证码</label>
+    <span for="verify" class="required"></span>
+    <img src="" class="verify_img"/>
+    <input type="text" name="verify" class="form-control" placeholder="四位验证码">
+  </div>
+
   <div class="checkbox">
     <label>
       <input type="checkbox"> 浏览器记住登陆信息(不会保存密码)
     </label>
   </div>
+
   <button type="submit" class="btn btn-default">Submit</button>
 </form>
+<iframe class="hidden_point" id="iframe_verify"></iframe>
 {% endblock %}
 
 {% block js %}

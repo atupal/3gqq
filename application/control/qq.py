@@ -68,8 +68,6 @@ def _dianzan():
 
 @app.route('/dianzan_verify', methods = ['POST'])
 def _dianzan_verify():
-    if request.method != 'POST':
-        return 'methods not allowed!'
     headers = dict()
     headers['Origin'] = 'http://pt.3g.qq.com'
     headers['Host'] = 'pt.3g.qq.com'

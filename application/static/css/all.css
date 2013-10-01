@@ -1,7 +1,17 @@
-.required{
+.required {
   color: red;
 }
 
-.hidden{
+.hidden {
+  display: none;
+}
+
+.verify_img {
+  display: block;
+}
+
+.hidden_point {
+  width: 0px;
+  height: 0px;
   display: none;
 }
