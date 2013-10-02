@@ -1,6 +1,6 @@
 
 import os, sys
-sys.path.append(os.path.realpath(__file__))
+sys.path.insert(0, os.path.realpath(__file__))
 ROOT_DIR = os.path.dirname(os.path.realpath(__file__))
 
 from application import app

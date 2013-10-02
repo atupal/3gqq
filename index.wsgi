@@ -1,6 +1,6 @@
 
 import os, sys
-sys.path.inssert(0, os.path.realpath(__file__))
+sys.path.insert(0, os.path.realpath(__file__))
 
 from application import app
 
@@ -10,7 +10,7 @@ from application import app
 #    start_response(status, response_headers)
 #    return ['<strong>Welcome to SAE!</strong>']
 
-if "HOME" in os.environ.keys() and os.environ['HOME'] == "/home/atupal":
+if __name__ == "__main__" and "HOME" in os.environ.keys() and os.environ['HOME'] == "/home/atupal":
     app.run('0.0.0.0', 8080)
 else:
     import sae
