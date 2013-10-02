@@ -28,13 +28,22 @@ def index_origin():
     cursor = db.cursor()
     cursor.execute('''select * from feedback order by id DESC''')
     ret = cursor.fetchall()
-    try:
-      ret_list = [ [ _[1].encode('utf-8', '') , _[2].encode('utf-8', ''), _[3].encode('utf-8', '') ] for _ in ret ]
-    except Exception as e:
-      print str(e)
-      import traceback, sys
-      traceback.print_exc(file=sys.stdout)
-      ret_list = [ ['error', 'error', 'error'] ]
+    ret_list = []
+    for _ in ret:
+      try:
+        ret_list.append(  [ _[1].encode('utf-8', '') , _[2].encode('utf-8', ''), _[3].encode('utf-8', '') ]  )
+      except Exception as e:
+        print str(e)
+        import traceback, sys
+        traceback.print_exc(file=sys.stdout)
+        ret_list = [ ['error', 'error', 'error'] ]
+    #try:
+    #  ret_list = [ [ _[1].encode('utf-8', '') , _[2].encode('utf-8', ''), _[3].encode('utf-8', '') ] for _ in ret ]
+    #except Exception as e:
+    #  print str(e)
+    #  import traceback, sys
+    #  traceback.print_exc(file=sys.stdout)
+    #  ret_list = [ ['error', 'error', 'error'] ]
 
     return render_template('index.html', comments = ret_list)
 
