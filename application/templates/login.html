@@ -27,7 +27,7 @@ welcome, {{ session.get('user') }}
 
 {% block page %}
 {% if 'user' in session %}
-<a href="/logout">logout</a>
+<a href="{{ url_for('logout') }}">logout</a>
 {% else %}
 <form class="form-horizontal" role="form" method="POST">
   <div class="form-group">
