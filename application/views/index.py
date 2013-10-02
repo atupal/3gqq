@@ -41,3 +41,7 @@ def dianzan_qq():
         data = json.loads(kv.get('qq#%s' % session['qq']))
       except:pass
   return render_template('dianzan_qq.html', data = data)
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+  return render_template('login.html')

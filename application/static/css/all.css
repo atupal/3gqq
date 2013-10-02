@@ -23,3 +23,12 @@
 .em-wrap {
   display: inline;
 }
+
+.uncompelte {
+  color: #444 !important;
+}
+
+.uncompelte:hover{
+  color: none !important;
+  background: none !important;
+}
