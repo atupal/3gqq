@@ -1,5 +1,4 @@
 #-*- coding: utf-8 -*-
-
 from application import app
 from flask import request
 from flask import render_template
@@ -36,7 +35,7 @@ def index_origin():
         print str(e)
         import traceback, sys
         traceback.print_exc(file=sys.stdout)
-        ret_list = [ ['error', 'error', 'error'] ]
+        #ret_list = [ ['error', 'error', 'error'] ]
     #try:
     #  ret_list = [ [ _[1].encode('utf-8', '') , _[2].encode('utf-8', ''), _[3].encode('utf-8', '') ] for _ in ret ]
     #except Exception as e:
@@ -56,3 +55,20 @@ def dianzan_qq():
         data = json.loads(kv.get('qq#%s' % session['qq']))
       except:pass
   return render_template('dianzan_qq.html', data = data)
+
+@app.route('/comment', methods=['GET', 'POST'])
+def comment():
+  db = init_db()
+  cursor = db.cursor()
+  cursor.execute('''select * from feedback order by id DESC''')
+  ret = cursor.fetchall()
+  ret_list = []
+  for _ in ret:
+    try:
+      ret_list.append([ _[1].decode('utf-8'), _[2].decode('utf-8', ''), _[3].decode('utf-8', '') ])
+    except Exception as e:
+      print str(e)
+      import traceback, sys
+      traceback.print_exc(file=sys.stdout)
+      #ret_list = [ ['error', 'error', 'error'] ]
+  return render_template('feedback.html', comments = ret_list)

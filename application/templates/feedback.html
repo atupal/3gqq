@@ -1,0 +1,69 @@
+{% extends "layout.html" %}
+
+{% block head %}
+{{ super() }}
+{% endblock %}
+
+{% block title %}
+{{ super() }}
+{% endblock %}
+
+{% block css %}
+{{ super() }}
+{% endblock %}
+
+{% block body %}
+{{ super() }}
+{% endblock %}
+
+{% block header %}
+留下你的评论吧 !
+{% endblock %}
+
+{% block page %}
+<form action="/feedback" method="POST" role="form" class="form-horizontal">
+  <div class="form-group">
+    <label class="col-lg-1 control-label">nickname</label>
+    <div class="col-lg-10">
+      <input type="text", name="nickname" class="form-control"/>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-lg-1 control-label">contact:</label>
+    <div class="col-lg-10">
+      <input type="text", name="contact" class="form-control"/>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-lg-1 control-label">comment(*):</label>
+    <div class="col-lg-10">
+      <input type="text", name="comment" class="form-control"/>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-lg-offset-1 col-lg-10">
+      <button type="submit" class="btn btn-default">Submit</button>
+    </div>
+  </div>
+</form>
+
+<hr />
+
+{%  for c in comments %}
+<div>
+    <pre>nickname: {{c[0]}}  </pre>
+    <pre>contact: {{c[1]}}  </pre>
+    <pre>comment: {{c[2]}}  </pre>
+    <hr />
+</div>
+{% endfor %}
+{% endblock %}
+
+{% block js %}
+{{ super() }}
+{% endblock %}
+
+{% block github %}
+{{ super() }}
+{% endblock %}
