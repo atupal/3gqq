@@ -3,11 +3,10 @@
 from application import app
 from flask import request
 from flask import render_template
+from flask import session
 
 from application.apps import dianzan
 import sys
-reload(sys)
-sys.setdefaultencoding('utf-8')
 
 from application.apps.db_methods import add_task
 from application.apps.db_methods import init_db
@@ -15,6 +14,9 @@ import logging
 import traceback
 from pprint import pprint as printf
 import urllib
+import json
+
+from application.control import kvdbwrap
 
 @app.route('/dianzan', methods = ['POST'])
 def _dianzan():
@@ -27,9 +29,49 @@ def _dianzan():
         frr = request.form.get('frr', '')
         pos = request.form.get('pos', '')
         neg = request.form.get('neg', '')
+        remember = request.form.get('remember', '')
+        _url = None
+        data = {}
+        data['remember'] = remember
+        if remember == "on" and session.get('qq') == qq:
+          with kvdbwrap.KVDB() as kv:
+            try:
+              ret = kv.get('qq#%s' % qq)
+              data = json.loads(ret)
+            except Exception as e:
+              print str(e)
+              import sys, traceback
+              traceback.print_exc(file=sys.stdout)
+          data['remember'] = 'on'
+        else:
+          if 'qq' in session:
+            session.pop('qq', None)
 
-        try:D = dianzan.Dianzan(qq = qq, pwd = pwd, cnt = int(cnt), feq = int(feq), inc = int(inc), pos = pos, neg = neg)
-        except Exception as e: print e; traceback.print_exc(file = sys.stdout)
+        data.update({
+          'qq': qq,
+          'pwd': pwd,
+          'cnt': cnt,
+          'feq': feq,
+          'inc': inc,
+          'frr': frr,
+          'pos': pos,
+          'neg': neg
+          })
+        try:
+          D = dianzan.Dianzan(**data)
+          #D = dianzan.Dianzan(
+          #                    qq = qq, 
+          #                    pwd = pwd,
+          #                    cnt = int(cnt),
+          #                    feq = int(feq),
+          #                    inc = int(inc),
+          #                    pos = pos,
+          #                    neg = neg,
+          #                    url = _url
+          #                    )
+        except Exception as e:
+          print e
+          traceback.print_exc(file = sys.stdout)
 
 
         ret = D.dianzan(cnt = int(cnt))
@@ -62,6 +104,7 @@ def _dianzan():
     except Exception as e:
         #logging.error(str(e))
         print str(e)
+        import traceback, sys
         traceback.print_exc(file=sys.stdout)
         ret = "<p>%s</p>"%("用户名，密码或者验证码错误!请再试一次")
         ret += '<script> console.log("%s") </script>' % str(e)

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 
 from flask import Flask
 
@@ -17,6 +18,12 @@ app = Flask(__name__, static_url_path = "")
 
 #logging.basicConfig(filename= 'logs/debug.log',level=logging.DEBUG)
 #logging.debug('tess')
+
+import os
+app.config.update(
+    #使用session必须要配置secret key
+    SECRET_KEY=os.urandom(32).encode('hex')
+    )
 
 @app.before_request
 def before_request():

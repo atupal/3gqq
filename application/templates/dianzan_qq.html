@@ -25,13 +25,13 @@ QQ空间点赞机
     <input type="text" name="qq" class="form-control" placeholder="Enter QQ/email" id="qq">
   </div>
   <div class="form-group">
-    <label>Password<strong class="required"> *</strong></label>
+    <label>Password<strong class="required"> {{ '已保存登陆信息,无需再次输入密码' if 'qq' in session else '*' }}</strong></label>
     <span class="required" for="password"></span>
     <input type="password" name="pwd" class="form-control" placeholder="Password" id="password">
   </div>
   <div class="form-group">
     <label for="cnt">点赞页数</label>
-    <select name="cnt" class="form-control" id="cnt">
+    <select name="cnt" class="form-control" id="cnt" value="{{ data.get('cnt') if ('qq' in session) else '1' }}"> 
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
@@ -41,7 +41,7 @@ QQ空间点赞机
   </div>
   <div class="form-group">
     <label for="feq">点赞次数<span class="required"> (仅对登陆用户有效)</span></label>
-    <select name="feq" class="form-control" id="feq">
+    <select name="feq" class="form-control" id="feq" value="{{data.get('feq') if 'qq' in session else '1'}}">
         <option value="1">1</option>
         <option value="5">5</option>
         <option value="10">10</option>
@@ -54,7 +54,7 @@ QQ空间点赞机
   </div>
   <div class="form-group">
     <label for="inc">点赞间隔(min)<span class="required"> (仅对登陆用户有效)</span></label>
-    <select name="inc" class="form-control" id="inc">
+    <select name="inc" class="form-control" id="inc" value="{{ data.get('inc') if 'qq' in session else '10' }}">
         <option value="10">10</option>
         <option value="20">30</option>
         <option value="60">60</option>
@@ -92,7 +92,7 @@ QQ空间点赞机
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
-    <input type="text" name="pos" id="pos" class="form-control"/>
+    <input type="text" name="pos" id="pos" class="form-control" value="{{ data.get('pos') if 'qq' in session else ''}}"/>
   </div>
 
   <div class="form-group">
@@ -118,7 +118,7 @@ QQ空间点赞机
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
-    <input type="text" id="neg" name="neg" class="form-control"/>
+    <input type="text" id="neg" name="neg" class="form-control" value="{{ data.get('neg') if 'qq' in session else ''}}"/>
   </div>
 
   <div class="form-group hidden" id="verify_div">
@@ -130,7 +130,7 @@ QQ空间点赞机
 
   <div class="checkbox">
     <label>
-      <input type="checkbox"> 记住登陆信息(保存书签(非密码)在服务器上，无需再次登陆)
+      <input type="checkbox" name="remember" {{ 'checked="true"' if 'qq' in session }}> 记住登陆信息(保存书签(非密码)在服务器上，无需再次登陆)
     </label>
   </div>
 

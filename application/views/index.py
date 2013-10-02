@@ -14,6 +14,8 @@ import traceback
 from pprint import pprint as printf
 
 #from application import db
+from application.control import kvdbwrap
+from flask import session
 
 @app.route('/')
 def index():
@@ -32,4 +34,10 @@ def index_origin():
 
 @app.route('/dianzan_qq')
 def dianzan_qq():
-  return render_template('dianzan_qq.html')
+  data = {}
+  if 'qq' in session:
+    with kvdbwrap.KVDB() as kv:
+      try:
+        data = json.loads(kv.get('qq#%s' % session['qq']))
+      except:pass
+  return render_template('dianzan_qq.html', data = data)

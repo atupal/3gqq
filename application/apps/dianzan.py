@@ -33,6 +33,10 @@ import lxml.html
 import urllib
 import logging
 import unittest
+import json
+from application.control import kvdbwrap
+try:from flask import session
+except:pass
 
 try:
     from application.apps.db_methods import init_db
@@ -58,16 +62,22 @@ class Dianzan:
         neg        : 出现了这些词语就不点赞
     '''
 
-    def __init__(self, qq = None, pwd = None, feq = 1, inc = 10, cnt = 1, url = None, frr = '', pos = '', neg = ''):
+    def __init__(self, qq = None, pwd = None, feq = 1, inc = 10, cnt = 1, url = None, frr = '', pos = '', neg = '', remember = "off"):
         self.qq = 'atupal@foxmail.com' if not qq else qq
         self.pwd = 'xxxxx' if not pwd else pwd
         self.feq = feq
         self.inc = inc
         self.cnt = cnt
+        self.frr = frr
         self.pos = pos
         self.neg = neg
+        self.remember = remember
         self.session = requests.Session()
-        self._login()
+        self.verify = None
+        if remember == "on" and url and url.startswith('http'):
+          self.url = url
+        else:
+          self._login()
         self.repeat_set = set()
 
     def _parse(self, url, _xpath, content = None):
@@ -172,8 +182,14 @@ class Dianzan:
                     form += '<input type="hidden" name="%s" value="%s"></input>'%(i, data[i])
 
                 form += '<input type="hidden" name="url" value="%s"></input>'%url #带上url，下次浏览器post接收
-                form += '<input type="hidden" name="pos" value="%s"></input>'%self.pos #带上url，下次浏览器post接收
-                form += '<input type="hidden" name="neg" value="%s"></input>'%self.neg #带上url，下次浏览器post接收
+                form += '<input type="hidden" name="pwd" value="%s"></input>'%self.pwd #下次浏览器post接收
+                form += '<input type="hidden" name="cnt" value="%s"></input>'%self.cnt #下次浏览器post接收
+                form += '<input type="hidden" name="feq" value="%s"></input>'%self.feq #下次浏览器post接收
+                form += '<input type="hidden" name="inc" value="%s"></input>'%self.inc #下次浏览器post接收
+                form += '<input type="hidden" name="frr" value="%s"></input>'%self.frr #下次浏览器post接收
+                form += '<input type="hidden" name="pos" value="%s"></input>'%self.pos #下次浏览器post接收
+                form += '<input type="hidden" name="neg" value="%s"></input>'%self.neg #下次浏览器post接收
+                form += '<input type="hidden" name="remember" value="%s"></input>'%self.remember #下次浏览器post接收
                 form += '<input type="text" name="verify"></input>'
                 form += '<input type="submit" value="confirm"></input>'
                 form += '</form>'
@@ -209,9 +225,18 @@ class Dianzan:
 
         if not url:
             url = data.pop('url')
-            self.pos = data.pop('pos')
-            self.neg = data.pop('neg')
             self.url = url  # Dianzan_verify子类没有登录, 所以手动添加url 属性
+        else:
+          data.pop('url')
+        self.qq = data.get('qq')
+        self.pwd = data.pop('pwd')
+        self.cnt = data.pop('cnt')
+        self.feq = data.pop('feq')
+        self.inc = data.pop('inc')
+        self.frr = data.pop('frr')
+        self.pos = data.pop('pos')
+        self.neg = data.pop('neg')
+        self.remember = data.pop('remember')
         res = self.session.post(url, data = data, headers = headers, allow_redirects = False)
         print '1' + str(res.content)
         url = res.headers['location']
@@ -311,8 +336,11 @@ class Dianzan:
         #content = self.session.get(self.url).content
         #urls = re.findall(patter, content)
 
-        if self.verify:
-            return self.verify
+        try:
+          if self.verify:
+              return self.verify
+        except:
+          pass
 
         if not url_from_db:feed_url = self.url
         else: feed_url = url_from_db
@@ -326,6 +354,13 @@ class Dianzan:
         neg = [ _.strip() for _ in self.neg.split('#') ]
         print pos, neg
         is_filter = self.pos or self.neg
+        try:
+          cnt = int(self.cnt)
+        except Exception as e:
+          print str(e)
+          import traceback, sys
+          traceback.print_exc(file=sys.stdout)
+
         for i in xrange(cnt):
             print "feed_url:" + feed_url
             content = self.session.get(feed_url).content
@@ -359,6 +394,24 @@ class Dianzan:
                 #if url.content.find('feeds_friends') != -1 or url.content.find('dayval=1') != -1:
                 feed_url = url.content
 
+        if self.remember == 'on':
+          session['qq'] = self.qq
+        #  记住登陆信息
+        with kvdbwrap.KVDB() as kv:
+          val = {
+              'qq': self.qq,
+              'url': self.url,
+              'cnt': self.cnt,
+              'feq': self.feq,
+              'inc': self.inc,
+              'frr': self.frr,
+              'pos': self.pos,
+              'neg': self.neg,
+              }
+          key = 'qq#%s' % self.qq
+          from pprint import pprint as printf
+          printf(val)
+          kv.add(key, json.dumps(val))
         return 'success'
 
 
