@@ -6,7 +6,7 @@ import redis
 
 class KVClient(object):
   def __init__(self, debug=0):
-    self.rclient = redis.StrictRedis(host='localhost', port=6379, db=0)
+    self.rclient = redis.StrictRedis(host='localhost', port=6379, db=1)
 
   def set(self, key, val, min_compress_len=0):
     """设置key的值为val, 成功则返回True
