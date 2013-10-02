@@ -19,6 +19,9 @@ app = Flask(__name__, static_url_path = "")
 #logging.basicConfig(filename= 'logs/debug.log',level=logging.DEBUG)
 #logging.debug('tess')
 
+from component.redis_session import RedisSessionInterface
+app.session_interface = RedisSessionInterface()
+
 import os
 app.config.update(
     #使用session必须要配置secret key
