@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+
+{% block head %}
+{{ super() }}
+{% endblock %}
+
+{% block title %}
+{{ super() }}
+{% endblock %}
+
+{% block css %}
+{{ super() }}
+{% endblock %}
+
+{% block body %}
+{{ super() }}
+{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block page %}
+<div style="margin-left:10px; margin-right:10px;">
+  <table class="table table-hover table-bordered">
+    <thead>
+      <tr>
+        <th colspan=6>
+          <h3>{{ name }}</h3>
+        </th>
+      </tr>
+      <tr>
+        <th>index</th>
+        <th>key</th>
+        <th>value<span class="col-lg-3"><span><a href="#" id="format">format</a></th>
+            <th>edit</th>
+            <th>trash</th>
+            <th>delete</th>
+          </tr>
+        </thead>
+        {% for key in values %}
+        <tr>
+          <th>{{ loop.index }}</th>
+          <th><pre style="white-space: pre; color:red;" class="key">{{ key[0] }}</pre></th>
+          <th><pre style="white-space: pre-line;" class="value">{{ key[1] }}</pre></th>
+          <th><a href="#">edit</a></th>
+          <th><a href="/kvdb_trash?key={{ key[0]|urlquote }}">trash</a></th>
+          <th><a href="/kvdb_del?key={{ key[0]|urlquote }}">delete</a></th>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+{% endblock %}
+
+{% block js %}
+{{ super() }}
+<script type="text/javascript" src="{{ url_for('static', filename='js/kvdbmanage.js') }}"></script>
+{% endblock %}
+
+{% block github %}
+{{ super() }}
+{% endblock %}
