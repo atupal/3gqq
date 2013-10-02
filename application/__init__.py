@@ -25,6 +25,12 @@ app.config.update(
     SECRET_KEY=os.urandom(32).encode('hex')
     )
 
+import urllib
+@app.template_filter('urlquote')
+def urlquote(uri):
+  return urllib.quote(uri)
+app.jinja_env.globals['urlquote'] = urlquote
+
 @app.before_request
 def before_request():
     pass
@@ -39,3 +45,5 @@ def teardown_request(exception):
 
 from application.views import index
 from application.control import qq
+from application.control import user
+from application.control import kvdbmanage

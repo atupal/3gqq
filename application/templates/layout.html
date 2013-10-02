@@ -15,14 +15,15 @@
 
     {% block css %}
     <!-- Bootstrap core CSS -->
-    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="/css/bootstrap.css" rel="stylesheet">
 
     <!-- Add custom CSS here -->
-    <link href="css/simple-sidebar.css" rel="stylesheet">
-    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/css/simple-sidebar.css" rel="stylesheet">
+    <link href="/font-awesome/css/font-awesome.min.css" rel="stylesheet">
 
-    <link href="css/github.css" rel="stylesheet">
-    <link href="css/all.css" rel="stylesheet">
+    <link href="/css/github.css" rel="stylesheet">
+    <link href="/css/all.css" rel="stylesheet">
+
     {% endblock %}
   </head>
 
@@ -37,12 +38,28 @@
           <li><a href="#" class="uncompelte">人人点赞机</a></li>
           <li><a href="#" class="uncompelte">微博点赞机</a></li>
           <li><a href="#" class="uncompelte">定制点赞机</a></li>
+          {% if 'user' in session %}
+          <li><a href="{{ url_for('login') }}">{{ session.get('user') }}</span></a></li>
+          {% else %}
           <li><a href="{{ url_for('login') }}">登陆<span class="required"> (登陆后使用所有功能)</span></a></li>
+          {% endif %}
           <li><a href="#" class="uncompelte">个人中心</a></li>
           <li><a href="#" class="uncompelte">阅后即焚</a></li>
           <li><a href="#" class="uncompelte">定时说说/状态</a></li>
           <li><a href="#" class="uncompelte">Contact</a></li>
           <li><a href="#" class="uncompelte">About</a></li>
+          <li><a href="#" class="uncompelte">反馈</a></li>
+          {% if 'admin' == session.get('user') %}
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">kvdbmanage<b class="caret"></b></a>
+            <ul class="dropdown-menu">
+              <li><a href="{{ url_for('kvdbmanage', key='all') }}">all</a></li>
+              <li><a href="{{ url_for('kvdbmanage', key='qq') }}">qq</a></li>
+              <li><a href="{{ url_for('kvdbmanage', key='user') }}">user</a></li>
+              <li><a href="{{ url_for('kvdbmanage', key='trash') }}">trash</a></li>
+            </ul>
+          </li>
+          {% endif %}
         </ul>
       </div>
     {% endblock %}
@@ -69,8 +86,8 @@
     {% block js %}
     <!-- Bootstrap core JavaScript -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="js/jquery.js"></script>
-    <script src="js/bootstrap.js"></script>
+    <script src="/js/jquery.js"></script>
+    <script src="/js/bootstrap.js"></script>
     <!-- Put this into a custom JavaScript file to make things more organized -->
     <script>
     $("#menu-toggle").click(function(e) {
