@@ -28,7 +28,7 @@ def index_origin():
     cursor = db.cursor()
     cursor.execute('''select * from feedback order by id DESC''')
     ret = cursor.fetchall()
-    try:ret_list = [ [ _[1] , _[2], _[3] ] for _ in ret ]
+    try:ret_list = [ [ _[1].encode('utf-8') , _[2].encode('utf-8'), _[3].encode('utf-8') ] for _ in ret ]
     except:ret_list = [ ['error', 'error', 'error'] ]
 
     return render_template('index.html', comments = ret_list)

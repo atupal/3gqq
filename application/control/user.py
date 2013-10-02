@@ -26,6 +26,11 @@ def login():
       return redirect(request.args.get('next'))
   return render_template('login.html')
 
+@app.route('/logout')
+def logout():
+  session.pop('user', None)
+  return render_template('login.html')
+
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
   return render_template('signup.html')

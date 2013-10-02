@@ -17,9 +17,47 @@
 {% endblock %}
 
 {% block header %}
+注册
 {% endblock %}
 
 {% block page %}
+<form class="form-horizontal" role="form" method="POST">
+  <div class="form-group">
+    <label for="inputEmail1" class="col-lg-2 control-label">Email</label>
+    <div class="col-lg-10">
+      <input type="email" class="form-control" id="inputEmail1" placeholder="Email" name="email" autocomplete="off">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="nick" class="col-lg-2 control-label">nickname</label>
+    <div class="col-lg-10">
+      <input type="text" class="form-control" id="nick" placeholder="昵称" name="nick" autocomplete="off">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="qq" class="col-lg-2 control-label">QQ</label>
+    <div class="col-lg-10">
+      <input type="text" class="form-control" id="qq" placeholder="QQ号码" name="qq" autocomplete="off">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="inputPassword1" class="col-lg-2 control-label">Password</label>
+    <div class="col-lg-10">
+      <input type="password" class="form-control" id="inputPassword1" placeholder="Password" name="password" autocomplete="off">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="inputPassword2" class="col-lg-2 control-label">Password confirm</label>
+    <div class="col-lg-10">
+      <input type="password" class="form-control" id="inputPassword2" placeholder="Password confirm" name="password-re" autocomplete="off">
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-lg-offset-2 col-lg-10">
+      <button type="submit" class="btn btn-primary">Sign up</button>
+    </div>
+  </div>
+</form>
 {% endblock %}
 
 {% block js %}
