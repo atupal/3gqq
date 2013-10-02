@@ -15,7 +15,7 @@ from application.control import kvdbwrap
 
 @app.route("/kvdbmanage")
 @app.route("/kvdbmanage/<key>")
-#@admin_required
+@admin_required
 def kvdbmanage(key=None):
   if not key:
     return render_template("database.html")
@@ -27,7 +27,7 @@ def kvdbmanage(key=None):
 
 @app.route("/kvdbmanage/raw")
 @app.route("/kvdbmanage/raw/<key>")
-#@admin_required
+@admin_required
 def kvdbmanage_row(key=None):
   if not key:
     return 'n/a'
@@ -39,7 +39,7 @@ def kvdbmanage_row(key=None):
     return json.dumps(key_values)
 
 @app.route("/kvdb_add", methods = ["POST"])
-#@admin_required
+@admin_required
 def kvdb_add():
     with kvdbwrap.KVDB() as kv:
       key =  request.form['key']
@@ -52,7 +52,7 @@ def kvdb_add():
     return 'kvdb_add'
 
 @app.route("/kvdb_trash", methods = ["POST", "GET"])
-#@admin_required
+@admin_required
 def kvdb_trash():
     with kvdbwrap.KVDB() as kv:
       key =  request.form.get('key') or request.args.get('key', '')
@@ -68,7 +68,7 @@ def kvdb_trash():
     return redirect("/kvdbmanage/%s" % key.split('#')[0])
 
 @app.route("/kvdb_del", methods = ["POST", "GET"])
-#@admin_required
+@admin_required
 def kvdb_del():
     #kv = sae.kvdb.KVClient()
     with kvdbwrap.KVDB() as kv:
@@ -78,7 +78,7 @@ def kvdb_del():
     return redirect("/kvdbmanage/%s" % key.split('#')[0])
 
 @app.route("/kvdb_set", methods = ["POST"])
-#@admin_required
+@admin_required
 def kvdb_set():
     with kvdbwrap.KVDB() as kv:
       key =  request.form.get('key') or request.args.get('key')
@@ -91,7 +91,7 @@ def kvdb_set():
     return 'kvdb_set'
 
 @app.route("/kvdb_update", methods=['GET', 'POST'])
-#@admin_required
+@admin_required
 def kvdb_update():
   try:
     key = request.form.get('key') or request.args.get('key')
