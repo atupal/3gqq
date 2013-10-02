@@ -31,7 +31,7 @@ def index_origin():
     ret_list = []
     for _ in ret:
       try:
-        ret_list.append(  [ _[1].encode('utf-8', '') , _[2].encode('utf-8', ''), _[3].encode('utf-8', '') ]  )
+        ret_list.append(  [ _[1].decode('utf-8'), _[2].decode('utf-8', ''), _[3].decode('utf-8', '') ]  )
       except Exception as e:
         print str(e)
         import traceback, sys
