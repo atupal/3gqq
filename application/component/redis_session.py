@@ -2,7 +2,8 @@ import pickle
 from datetime import timedelta
 from uuid import uuid4
 from werkzeug.datastructures import CallbackDict
-from flask.sessions import SessionInterface, SessionMixin
+#from flask.sessions import SessionInterface, SessionMixin
+from flask.session import SessionInterface, SessionMixin
 import json
 import time
 
