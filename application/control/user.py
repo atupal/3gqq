@@ -63,7 +63,7 @@ def signup():
     data['qq'] = request.form.get('qq', '').strip()
     data['password'] = request.form.get('password', '')
     cid = hashlib.md5(os.urandom(32)).hexdigest()
-    url = 'http://3gqq67.sinapp.com/email_verify?cid=%s&email=%s' % (urllib.quote(cid), urllib.quote(data['email']))
+    url = 'http://3gqq67.sinaapp.com/email_verify?cid=%s&email=%s' % (urllib.quote(cid), urllib.quote(data['email']))
     with kvdbwrap.KVDB() as kv:
       data['cid'] = cid
       data['init_time'] = int(time.time())
