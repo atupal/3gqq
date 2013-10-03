@@ -71,18 +71,54 @@
           <h1>
             <a id="menu-toggle" href="#" class="btn btn-default"><i class="icon-reorder"></i></a>
             {% block header %}
-            重构中，请移步<a href=/origin>origin</a>
+            重构中
             {% endblock %}
           </h1>
         </div>
         <!-- Keep all page content within the page-content inset div! -->
         <div class="page-content inset">
+          <p class="required">请移步<a href=/origin>origin</a>, 或者使用左侧已经完成的一些功能</p>
           {% block page %}
+          <ul>
+            <li>
+              <h3>点赞机是什么</h3>
+              <pre>一个可以帮你自动自动点赞特定的状态/说说的点赞机器人，登陆后还能设定自己的点赞规则，比如每隔多少分钟自动点赞一次。。。
+^_^ 或者
+while(true) {
+  给xxx的说说点赞;
+  给xxx的说说取消赞;
+  time.sleep(1分钟);//节操呢。。
+}</pre>
+            </li>
+            <li>
+              <h3>使用点赞机有盗号风险吗</h3>
+              <pre>没有，所有操作跟你在自己的空间操作是一样的，包括登陆</pre>
+            </li>
+            <li>
+              <h3>如果不小心点赞了不该点赞的状态怎么办</h3>
+              <pre>你可以过滤调某些词语，使之不会点赞，支持过滤表情, 或者点赞的说说或动态显示出来，你可以立即取消赞</pre>
+            </li>
+            <li>
+              <h3>有android版吗</h3>
+              <pre>暂时没有，正在考虑</pre>
+            </li>
+            <li>
+              <h3>点赞机是用什么写的</h3>
+              <pre>python，源代码可以在右上角去看，欢迎fork</pre>
+            </li>
+            <li>
+              <h3>如何反馈建议</h3>
+              <pre>左侧</pre>
+            </li>
+          </ul>
           {% endblock %}
         </div>
+      </div> <!-- page-cotent insert -->
+      <div class="footer">
+        <span>&copy; atupal</span>
       </div>
-      
-    </div>
+    </div> <!-- wrapper -->
+
 
     {% block js %}
     <!-- Bootstrap core JavaScript -->

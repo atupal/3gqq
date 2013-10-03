@@ -32,3 +32,8 @@
   color: none !important;
   background: none !important;
 }
+
+.footer {
+  margin-left: 70px;
+  bottom: 0;
+}
