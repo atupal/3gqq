@@ -118,10 +118,10 @@ class KVClient(object):
     """
     for key in self.rclient.keys():
       self.delete(key)
-    url = 'xxx'
+    url = 'http://3gqq67.sinaapp.com/kvdbmanage/raw/all'
     import requests, json
     s = requests.Session()
-    s.post('xxx', data = {'username': 'xxx', 'password': 'xxx'})
+    s.post('http://3gqq67.sinaapp.com/login', data = {'email': '', 'password': ''})
     content = s.get(url).content
     #print content
     ret = json.loads(content)
