@@ -46,8 +46,12 @@ except:
 import MySQLdb
 
 def init_db():
+  try:
     db = MySQLdb.connect(host = MYSQL_HOST, port = int(MYSQL_PORT), db = MYSQL_DB , user = MYSQL_USER, passwd = MYSQL_PASS )
     return db
+  except:
+    print 'init mysql failed'
+    return None
 
 def create_table(db, sql = None):
     cursor = db.cursor()
