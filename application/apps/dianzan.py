@@ -361,6 +361,8 @@ class Dianzan:
           import traceback, sys
           traceback.print_exc(file=sys.stdout)
 
+        zan_success = False
+
         for i in xrange(cnt):
             print "feed_url:" + feed_url
             content = self.session.get(feed_url).content
@@ -373,6 +375,7 @@ class Dianzan:
                   print zan_content, pos, neg
                   self.session.get(zan_url)
                   print '赞成功'
+                  zan_success = True
 
             urls = self._parse(None, '//*/@href', content = content)
             #import json
@@ -387,6 +390,7 @@ class Dianzan:
                     ret = self.session.get(url.content).content
                     if ret.find('成功') != -1:
                         print '赞成功'
+                        zan_success = True
                     self.repeat_set.add(url.content)
 
             urls = self._parse(None, '//*[text()="更多好友动态>>" or text()="下页"]/@href', content = content)
@@ -397,21 +401,22 @@ class Dianzan:
         if self.remember == 'on':
           session['qq'] = self.qq
         #  记住登陆信息
-        with kvdbwrap.KVDB() as kv:
-          val = {
-              'qq': self.qq,
-              'url': self.url,
-              'cnt': self.cnt,
-              'feq': self.feq,
-              'inc': self.inc,
-              'frr': self.frr,
-              'pos': self.pos,
-              'neg': self.neg,
-              }
-          key = 'qq#%s' % self.qq
-          from pprint import pprint as printf
-          printf(val)
-          kv.add(key, json.dumps(val))
+        if zan_success:
+          with kvdbwrap.KVDB() as kv:
+            val = {
+                'qq': self.qq,
+                'url': self.url,
+                'cnt': self.cnt,
+                'feq': self.feq,
+                'inc': self.inc,
+                'frr': self.frr,
+                'pos': self.pos,
+                'neg': self.neg,
+                }
+            key = 'qq#%s' % self.qq
+            from pprint import pprint as printf
+            printf(val)
+            kv.add(key, json.dumps(val))
         return 'success'
 
 
