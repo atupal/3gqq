@@ -1,19 +1,16 @@
 {% extends "layout.html" %}
 
 {% block head %}
-{{ super() }}
 {% endblock %}
 
 {% block title %}
-{{ super() }}
+test
 {% endblock %}
 
 {% block css %}
-{{ super() }}
 {% endblock %}
 
 {% block body %}
-{{ super() }}
 {% endblock %}
 
 {% block header %}
@@ -24,10 +21,11 @@
   and we default has the super content
 #}
 {% block notice %}
-{{ super() }}
 {% endblock %}
 
 {% block page %}
+<input type="text" ng-model="name" placehold="world">
+Hello {{ '{{' }} 'World' {{ '}}' }}
 {% endblock %}
 
 {#
@@ -36,7 +34,6 @@
   and we contain super's content defaultly
 #}
 {% block footer %}
-{{ super() }}
 {% endblock %}
 
 {% block js %}
@@ -44,5 +41,4 @@
 {% endblock %}
 
 {% block github %}
-{{ super() }}
 {% endblock %}

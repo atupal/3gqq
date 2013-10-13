@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app>
   <head>
     {% block head%}
     <meta charset="utf-8">
@@ -77,7 +77,9 @@
         </div>
         <!-- Keep all page content within the page-content inset div! -->
         <div class="page-content inset">
+          {% block notice %}
           <p class="required">请移步<a href=/origin>origin</a>, 或者使用左侧已经完成的一些功能</p>
+          {% endblock %}
           {% block page %}
           <ul>
             <li>
@@ -115,7 +117,9 @@ while(true) {
         </div>
       </div> <!-- page-cotent insert -->
       <div class="footer">
+        {% block footer %}
         <span>&copy; <a href="http://weibo.com/u/2625685811">atupal</a></span>
+        {% endblock %}
       </div>
     </div> <!-- wrapper -->
 
@@ -132,6 +136,8 @@ while(true) {
         $("#wrapper").toggleClass("active");
     });
     </script>
+    <!--  angular.js -->
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
     {% endblock %}
 
     {% block github %}

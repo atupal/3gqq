@@ -72,3 +72,8 @@ def comment():
       traceback.print_exc(file=sys.stdout)
       #ret_list = [ ['error', 'error', 'error'] ]
   return render_template('feedback.html', comments = ret_list)
+
+
+@app.route('/test', methods=['GET', 'POST'])
+def test():
+  return render_template('test.html')
