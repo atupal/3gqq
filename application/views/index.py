@@ -76,4 +76,5 @@ def comment():
 
 @app.route('/test', methods=['GET', 'POST'])
 def test():
+  print session.permanent
   return render_template('test.html')

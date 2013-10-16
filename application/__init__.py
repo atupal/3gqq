@@ -28,6 +28,8 @@ app.config.update(
     SECRET_KEY=os.urandom(32).encode('hex')
     )
 
+app.config.from_object('application.config')
+
 import urllib
 @app.template_filter('urlquote')
 def urlquote(uri):

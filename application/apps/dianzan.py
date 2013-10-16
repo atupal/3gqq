@@ -399,6 +399,7 @@ class Dianzan:
                 feed_url = url.content
 
         if self.remember == 'on':
+          session.permanent = True  # make the session permanent after closing brower
           session['qq'] = self.qq
         #  记住登陆信息
         if zan_success:

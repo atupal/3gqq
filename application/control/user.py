@@ -26,6 +26,7 @@ def login():
     with kvdbwrap.KVDB() as kv:
       ret = json.loads(kv.get('user#admin'))
       if email.split('@')[0] == 'admin' and password == ret.get('password'):
+        session.permanent = True  # make the session permanent after closing the  brower
         session['user'] = 'admin'
 
     try:
