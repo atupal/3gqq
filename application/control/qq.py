@@ -70,6 +70,7 @@ def _dianzan():
           #                    url = _url
           #                    )
         except Exception as e:
+          import traceback, sys
           print e
           traceback.print_exc(file = sys.stdout)
 

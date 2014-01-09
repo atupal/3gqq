@@ -37,6 +37,7 @@ QQ空间点赞机
         <option value="3">3</option>
         <option value="4">4</option>
         <option value="5">5</option>
+        <option value="0">0</option>
     </select>
   </div>
   <div class="form-group">
@@ -65,7 +66,7 @@ QQ空间点赞机
 
   <div class="form-group">
     <label></label>
-    <button class="form-control" type="button">选择点赞的指定好友</button>
+    <button class="form-control" type="button" data-url="{{ data.get('url', '').encode('base64') }}" id="btn-select-frr">选择点赞的指定好友(仅在记住登陆信息后有效)</button>
   </div>
 
   <div class="form-group">
@@ -134,7 +135,7 @@ QQ空间点赞机
     </label>
   </div>
 
-  <button type="submit" class="btn btn-default">Submit</button>
+  <button type="submit" class="btn btn-default" name="sub">Submit</button>
 </form>
 <iframe class="hidden_point" id="iframe_verify"></iframe>
 {% endblock %}
@@ -142,6 +143,7 @@ QQ空间点赞机
 {% block js %}
 {{ super() }}
 <script type="text/javascript" src="{{ url_for('static', filename='js/dianzan_qq.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/libs/flyjsonp.js') }}"></script>
 {% endblock %}
 
 {% block github %}

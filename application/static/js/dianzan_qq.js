@@ -4,8 +4,41 @@
  * date: 1/10/2013
  * */
 
+//FlyJSONP.init({debug: true});
+
+var client = {
+  _getfrr_url: 'http://m.qzone.com/friend/mfriend_list?res_type=normal&format=json&count_per_page=100&page_index=0&page_type=0&mayknowuin=&qqmailstat=',
+  getfrr: function(url) {
+    var _url = Base64.decode(url);
+    var a = document.createElement('a');
+    a.href = _url;
+    var params = (function(){
+        var ret = {},
+        seg = a.search.replace(/^\?/,'').split('&'),
+        len = seg.length, i = 0, s;
+        for (;i<len;i++) {
+          if (!seg[i]) { continue; }
+          s = seg[i].split('=');
+          ret[s[0]] = s[1];
+        }
+        return ret;
+      })();
+    $.ajax({
+      type: 'post',
+      url: '/proxy',
+      data: {
+        url: this._getfrr_url + '&res_uin='+ params.B_UID +'&sid=' + params.sid
+      }
+    })
+    .success(function(data){
+      console.log(data)
+    });
+  },
+}
+
 $(function(){
-  $("form").submit( function(e) {
+  //$("form").submit( function(e) {
+  $("[name=sub]").click( function(e) {
     if (! ($("[name=qq]")[0].value) ) {
       $("[for=qq]").text("请输入QQ号码！").show().fadeOut(1000);
       return false;
@@ -120,4 +153,13 @@ $(function(){
     }
   });
 
+  $("#btn-select-frr").click(function(){
+    var url = this.getAttribute('data-url');
+    if (url === '') {
+      alert('您尚未记住登陆信息, 请选择记住登陆信息后重试，谢谢');
+      return false;
+    } else {
+      client.getfrr(url);
+    }
+  });
 });

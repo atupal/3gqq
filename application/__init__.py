@@ -48,7 +48,11 @@ def teardown_request(exception):
     try:db.close()
     except:pass
 
+# views
 from application.views import index
+# control
 from application.control import qq
 from application.control import user
 from application.control import kvdbmanage
+# apps
+from application.apps import proxy
